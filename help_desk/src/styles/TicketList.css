@@ -1,0 +1,297 @@
+/* Container and Header */
+.ticket-list-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9fafb;
+}
+
+.ticket-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ticket-list-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.search-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 250px;
+}
+
+.filter-button,
+.new-ticket-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter-button {
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.new-ticket-button {
+  background-color: #0f9d58;
+  color: white;
+  font-weight: bold;
+}
+
+.new-ticket-button:hover {
+  background-color: #0d8650;
+}
+
+/* Ticket List */
+.ticket-list {
+  list-style: none;
+  /* padding: 0;
+  margin: 0; */
+  background: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  /* padding: 15px 20px;  */
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+}
+
+.ticket-info {
+  flex: 1;
+  text-align: left; /* Aligns all text to the left */
+  display: flex;
+  flex-direction: column; /* Ensures items stack vertically */
+  gap: 2px /* Adds spacing between lines */
+}
+
+.ticket-title {
+  font-size: 14px;
+  margin: 0 0 5px;
+}
+
+.ticket-meta {
+  color: #888;
+  font-size: 14px;
+  margin: 0 0 5px;
+}
+
+.ticket-assigned, .technician-name {
+  color: #00796b;
+  /* font-weight: bold; */
+  font-size: 14px;
+  margin: 0 0 5px;
+}
+
+/* Status Badge */
+.ticket-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+.ticket-status, .inprogress {
+  background-color: #ffa000;
+}
+
+.ticket-status.new {
+  background-color: #0f9d58;
+}
+
+/* Status and Actions Section */
+.ticket-status-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Menu Button */
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+}
+
+/* Notification Box */
+.notification-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 15px 20px;
+  width: 300px;
+  z-index: 1000;
+}
+
+.notification-box h3 {
+  margin: 0 0 5px;
+}
+
+.notification-box p {
+  margin: 0;
+  color: #555;
+}
+
+.icons {
+  margin: 0; /* Remove any margin around the icon */
+  padding: 20px 20px; /* Remove any padding inside the icon */
+  vertical-align: middle; /* Aligns the icon vertically with the text */
+  display: inline-block; /* Keeps the icon inline with text */
+  line-height: 1; /* Ensures consistent spacing */
+  font-size: 14px; /* Adjust size if needed */
+  color: yellow
+}
+
+.ticket-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #f5c6cb;
+  font-size: 14px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Loading Message */
+.loading-message {
+  background-color: #d6d8d9;
+  color: #383d41;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #c6c8ca;
+  font-size: 14px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: normal;
+}
+
+.ticket-item {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 10px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.ticket-actions {
+  position: relative;
+}
+
+/* Ticket Card Styles */
+.ticket-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge.new {
+  background: #e6f8f0;
+  color: #0abf67;
+}
+
+.status-badge.inprogress {
+  background: #fff4e5;
+  color: #ff9800;
+}
+
+/* Dropdown */
+/* .dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #555;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 1000;
+  min-width: 200px;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-item svg {
+  margin-right: 8px;
+} */

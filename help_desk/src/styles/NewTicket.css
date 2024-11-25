@@ -1,0 +1,168 @@
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+  
+  /* Modal Box */
+.modal {
+  background-color: #D3D3D3;
+  padding: 20px 45px;
+  border-radius: 15px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  font-family: Arial, sans-serif;
+  font-size: 14px; /* Adjust font size for a smaller look */
+}
+  
+  /* Modal Title */
+.modal h2 {
+  margin-bottom: 20px;
+  font-size: 1.2rem; /* Slightly smaller title */
+  font-weight: bold;
+  color: #333;
+  text-align: left;
+}
+  
+  /* Form Group */
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  
+  /* Form Labels */
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem; /* Smaller font size for labels */
+    color: black;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  /* Form Inputs */
+  .form-input {
+    width: 100%;
+    padding: 8px 2px; /* Smaller padding */
+    margin-bottom: 4px;
+    border: 1px solid black;
+    border-radius: 7px;
+    font-size: 0.9rem; /* Smaller font size for inputs */
+    font-family: Arial, sans-serif;
+    background-color: white;
+  }
+
+  .form-input-description {
+    width: 100%;
+    height: 70px;
+    padding: 8px 2px;
+    border: 1px solid black;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    font-family: Arial, sans-serif;
+    background-color: white;
+    line-height: 1.5;
+    
+  }
+  
+  .form-input[type="text"],
+  .form-input[type="email"],
+  .form-input select {
+    background-color: white;
+  }
+  
+  .form-input textarea {
+    height: 100px; /* Smaller textarea height */
+    resize: horizontal;
+  }
+
+  .form-group-category {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    margin-bottom: 20px; /* Add some space between groups */
+   }
+   
+   .form-row {
+    display: flex; /* Align items in a row */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 0px; /* Space between rows */
+    text-align: left;
+   }
+   
+   .form-label-category {
+    margin-right: 150px; /* Space between label and select */
+    width: 150px; /* Fixed width for labels */
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem; /* Smaller font size for labels */
+    color: black;
+    font-weight: 600;
+    text-align: left;
+   }
+   
+.form-input-category {
+    width: 100%;
+    padding: 8px 2px; /* Smaller padding */
+    margin-bottom: 4px;
+    margin-right: 100px;
+    border: 1px solid black;
+    border-radius: 7px;
+    font-size: 0.9rem; /* Smaller font size for inputs */
+    font-family: Arial, sans-serif;
+    background-color: white;
+    
+}
+   
+   /* Optional: Style for the select elements */
+   .form-input-category select {
+    gap: 200px;
+    padding: 5px; /* Add some padding */
+    display: grid;
+    margin-right: 20px;
+    grid-template-columns: 1fr 1fr; /* Two columns for select options */
+   }
+  
+  /* Modal Action Buttons */
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .modal button {
+    padding: 8px 16px; /* Smaller button size */
+    font-size: 0.9rem; /* Smaller button font size */
+    font-weight: bold;
+    border: 1px solid;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .cancel-button {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  .cancel-button:hover {
+    background-color: #ddd;
+  }
+  
+  .submit-button {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .submit-button:hover {
+    background-color: #218838;
+  }
