@@ -1,5 +1,5 @@
 import { useAuth } from '../../features/auth/context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export function Header() {
   const { user, logout } = useAuth()
@@ -15,6 +15,7 @@ export function Header() {
       <span>GovHelpDesk</span>
       <div>
         <span style={{ marginRight: '1rem' }}>{user?.name} ({user?.role})</span>
+        <Link to="/tickets/new" style={{ marginRight: '1rem' }}>New Ticket</Link>
         <button onClick={handleLogout}>Log out</button>
       </div>
     </header>

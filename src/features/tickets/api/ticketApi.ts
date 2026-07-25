@@ -28,3 +28,8 @@ export async function getTicket(id: number): Promise<TicketResponse> {
   const response = await apiClient.get<TicketResponse>(`/tickets/${id}`)
   return response.data
 }
+
+export async function createTicket(payload: CreateTicketRequest): Promise<TicketResponse> {
+  const response = await apiClient.post<TicketResponse>('/tickets', payload)
+  return response.data
+}

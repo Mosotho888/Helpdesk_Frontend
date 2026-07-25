@@ -5,6 +5,7 @@ import { ProtectedRoute } from './routes/ProtectedRoute'
 import { TicketTable } from './features/tickets/components/TicketTable'
 import { TicketDetail } from './features/tickets/components/TicketDetail'
 import { Header } from './shared/components/Header'
+import { CreateTicketForm } from './features/tickets/components/CreateTicketForm'
 
 function App() {
   return (
@@ -27,6 +28,15 @@ function App() {
               <ProtectedRoute>
                 <Header />
                 <TicketDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tickets/new"
+            element={
+              <ProtectedRoute>
+                <Header />
+                <CreateTicketForm />
               </ProtectedRoute>
             }
           />

@@ -28,3 +28,12 @@ export interface PageTicketResponse {
   numberOfElements: number
   empty: boolean
 }
+
+export interface CreateTicketRequest {
+  subject: string
+  description: string
+  priority?: TicketPriority
+  category?: string
+  assigneeId?: number
+  tags?: string[]
+}
