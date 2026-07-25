@@ -1,5 +1,15 @@
 # Frontend Architecture Decisions
 
+## Auth: React Context + silent session restore
+AuthContext wraps login state (user, isAuthenticated, isLoading) and exposes login/logout.
+On app load, if a refresh token exists in localStorage, the app silently calls /auth/refresh to restore the session before rendering protected routes - avoids forcing a fresh login on every page reload. isLoading gates ProtectedRoute so a logged-in user never flashes through /login while the restore check is in progress.
+
+## Routing: React Router v6/v7
+ProtectedRoute wrapper checks isAuthenticated and redirects to /login (with `replace`) if not authenticated. AuthProvider wraps BrowserRouter since ProtectedRoute depends on useAuth().
+
+## Logout
+logout() calls /auth/logout to revoke the refresh token server-side, then always clears local state (access token, refresh token, user) regardless of whether the server call succeeds - a failed network request shouldn't trap the user in a half-logged-in state on their own device.
+
 ## State management: TanStack Query over Redux
 Chosen because the app's state is overwhelmingly server state (tickets, users, comments)
 rather than complex client-only state. TanStack Query handles caching, invalidation, and
