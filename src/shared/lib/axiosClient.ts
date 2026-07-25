@@ -14,6 +14,9 @@ export function getAccessToken() {
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
+  paramsSerializer: {
+    indexes: null, // renders arrays as repeated params: sort=x&sort=y, not sort[]=x&sort[]=y
+  },
 })
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {

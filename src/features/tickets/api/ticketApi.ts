@@ -7,6 +7,7 @@ interface GetTicketsParams {
   assigneeId?: number
   page?: number
   size?: number
+  sort?: string[]
 }
 
 export async function getTickets(params: GetTicketsParams = {}): Promise<PageTicketResponse> {
@@ -17,6 +18,7 @@ export async function getTickets(params: GetTicketsParams = {}): Promise<PageTic
       assigneeId: params.assigneeId,
       page: params.page ?? 0,
       size: params.size ?? 20,
+      sort: params.sort,
     },
   })
   return response.data

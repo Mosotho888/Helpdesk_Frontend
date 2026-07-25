@@ -15,6 +15,9 @@ Chosen because the app's state is overwhelmingly server state (tickets, users, c
 rather than complex client-only state. TanStack Query handles caching, invalidation, and
 loading/error states with far less boilerplate than Redux + createAsyncThunk for this use case.
 
+## Axios array param serialization
+Axios's default array serialization uses bracket notation (sort[]=x), which Spring's Pageable does not parse - requests succeeded (200) but the backend silently ignored the sort parameter, returning default-ordered results despite the UI showing an active sort indicator. Fixed via paramsSerializer: { indexes: null } on the Axios instance, producing repeated-key style (sort=x&sort=y) that Pageable correctly parses. Caught by comparing actual row order against the sort indicator, not just checking the request succeeded.
+
 ## Folder structure: feature-based
 Organised by domain (features/tickets, features/users, etc.) rather than by type
 (components/, hooks/, services/). Mirrors the backend's package structure and keeps

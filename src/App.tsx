@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './features/auth/context/AuthContext'
 import { LoginPage } from './features/auth/components/LoginPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
-import { TicketList } from './features/tickets/components/TicketList'
 import { Header } from './shared/components/Header'
+import { TicketTable } from './features/tickets/components/TicketTable'
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <Header />
-                <TicketList />
+                <TicketTable />
               </ProtectedRoute>
             }
           />

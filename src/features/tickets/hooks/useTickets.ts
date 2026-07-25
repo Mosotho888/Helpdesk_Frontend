@@ -8,6 +8,7 @@ interface UseTicketsParams {
   assigneeId?: number
   page?: number
   size?: number
+  sort?: string[]
 }
 
 export function useTickets(params: UseTicketsParams = {}) {
