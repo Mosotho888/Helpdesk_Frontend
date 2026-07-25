@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table'
 import { useTickets } from '../hooks/useTickets'
 import type { TicketResponse, TicketStatus, TicketPriority } from '../types'
+import { useNavigate } from 'react-router-dom'
 
 const columnHelper = createColumnHelper<TicketResponse>()
 
@@ -21,6 +22,7 @@ const columns = [
 ]
 
 export function TicketTable() {
+  const navigate = useNavigate()
   const [sorting, setSorting] = useState<SortingState>([])
   const [page, setPage] = useState(0)
   const [statusFilter, setStatusFilter] = useState<TicketStatus | ''>('')
@@ -91,7 +93,7 @@ export function TicketTable() {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} onClick={() => navigate(`/tickets/${row.original.id}`)} style={{ cursor: 'pointer' }}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {String(cell.getValue())}

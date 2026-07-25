@@ -1,5 +1,9 @@
 # Frontend Architecture Decisions
 
+## Comments: recursive rendering + mutation invalidation
+CommentResponse is self-referential (replies: CommentResponse[]), so a single Comment
+component renders itself recursively for arbitrary reply depth - no special-casing per level. useAddComment uses TanStack Query's useMutation; onSuccess invalidates the ['comments', ticketId] query key, triggering an automatic refetch so new comments appear without manual state management. Verified persistence with a hard page refresh, not just cache-driven UI update.
+
 ## Auth: React Context + silent session restore
 AuthContext wraps login state (user, isAuthenticated, isLoading) and exposes login/logout.
 On app load, if a refresh token exists in localStorage, the app silently calls /auth/refresh to restore the session before rendering protected routes - avoids forcing a fresh login on every page reload. isLoading gates ProtectedRoute so a logged-in user never flashes through /login while the restore check is in progress.
