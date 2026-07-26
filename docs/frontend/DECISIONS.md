@@ -1,5 +1,9 @@
 # Frontend Architecture Decisions
 
+## Styling: Tailwind CSS via Vite plugin
+Using @tailwindcss/vite (not the older PostCSS-config approach) for simpler setup. Tailwind import lives in src/index.css, which must be imported in main.tsx — this import was initially missing after main.tsx was rewritten for QueryClientProvider setup, causing Tailwind classes to have zero effect despite correct plugin/config. Confirmed working via a visible color/weight test
+before proceeding to real component styling.
+
 ## Audit trail display
 AuditTrail fetches GET /audit/tickets/{id} and renders a chronological list of actions (formatted from raw enum values like STATUS_CHANGED → "Status Changed"). Fails silently for non-Admin/Agent viewers, consistent with the SLA component's approach - a 403 on a correctly-restricted endpoint shouldn't look like a broken feature.
 
