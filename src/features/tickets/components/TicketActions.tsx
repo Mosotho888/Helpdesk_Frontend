@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateTicket } from '../api/ticketApi'
+import { useAgents } from '../../agents/hooks/useAgents'
 import type { TicketResponse, TicketStatus, TicketPriority } from '../types'
 
 export function TicketActions({ ticket }: { ticket: TicketResponse }) {
   const queryClient = useQueryClient()
+  const { data: agentsData, isLoading: agentsLoading } = useAgents()
 
   const mutation = useMutation({
     mutationFn: updateTicket,
@@ -19,6 +21,11 @@ export function TicketActions({ ticket }: { ticket: TicketResponse }) {
 
   function handlePriorityChange(priority: TicketPriority) {
     mutation.mutate({ id: ticket.id, payload: { priority } })
+  }
+
+  function handleAssigneeChange(value: string) {
+    const assigneeId = value === '' ? undefined : Number(value)
+    mutation.mutate({ id: ticket.id, payload: { assigneeId } })
   }
 
   return (
@@ -51,6 +58,23 @@ export function TicketActions({ ticket }: { ticket: TicketResponse }) {
           <option value="MEDIUM">Medium</option>
           <option value="HIGH">High</option>
           <option value="URGENT">Urgent</option>
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="assignee-select">Assignee</label>
+        <select
+          id="assignee-select"
+          value={agentsData?.content.find((agent) => agent.user.id === ticket.assignee?.id)?.id ?? ''}
+          onChange={(e) => handleAssigneeChange(e.target.value)}
+          disabled={mutation.isPending || agentsLoading}
+        >
+          <option value="">Unassigned</option>
+          {agentsData?.content.map((agent) => (
+            <option key={agent.id} value={agent.id}>
+              {agent.user.name}
+            </option>
+          ))}
         </select>
       </div>
 
