@@ -1,5 +1,5 @@
 import apiClient from '../../../shared/lib/axiosClient'
-import type { PageTicketResponse, TicketResponse, TicketStatus, TicketPriority } from '../types'
+import type { PageTicketResponse, TicketResponse, TicketStatus, TicketPriority, CreateTicketRequest, UpdateTicketRequest } from '../types'
 
 interface GetTicketsParams {
   status?: TicketStatus
@@ -8,6 +8,11 @@ interface GetTicketsParams {
   page?: number
   size?: number
   sort?: string[]
+}
+
+interface UpdateTicketParams {
+  id: number
+  payload: UpdateTicketRequest
 }
 
 export async function getTickets(params: GetTicketsParams = {}): Promise<PageTicketResponse> {
@@ -31,5 +36,10 @@ export async function getTicket(id: number): Promise<TicketResponse> {
 
 export async function createTicket(payload: CreateTicketRequest): Promise<TicketResponse> {
   const response = await apiClient.post<TicketResponse>('/tickets', payload)
+  return response.data
+}
+
+export async function updateTicket({ id, payload }: UpdateTicketParams): Promise<TicketResponse> {
+  const response = await apiClient.patch<TicketResponse>(`/tickets/${id}`, payload)
   return response.data
 }

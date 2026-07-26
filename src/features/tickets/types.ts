@@ -37,3 +37,12 @@ export interface CreateTicketRequest {
   assigneeId?: number
   tags?: string[]
 }
+
+export interface UpdateTicketRequest {
+  status?: TicketStatus
+  priority?: TicketPriority
+  category?: string
+  assigneeId?: number
+  escalated?: boolean
+  escalationReason?: string
+}
