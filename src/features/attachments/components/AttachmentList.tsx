@@ -1,9 +1,12 @@
 import { useState, type ChangeEvent } from 'react'
 import { useAttachments, useUploadAttachments, useDeleteAttachment } from '../hooks/useAttachments'
 import { downloadAttachment } from '../api/attachmentApi'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 const MAX_FILES = 5
-const MAX_SIZE_BYTES = 20 * 1024 * 1024 // 20 MB
+const MAX_SIZE_BYTES = 20 * 1024 * 1024
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -20,7 +23,6 @@ export function AttachmentList({ ticketId }: { ticketId: number }) {
   function handleFileSelect(e: ChangeEvent<HTMLInputElement>) {
     setValidationError(null)
     const files = Array.from(e.target.files ?? [])
-
     if (files.length === 0) return
 
     if (files.length > MAX_FILES) {
@@ -39,38 +41,58 @@ export function AttachmentList({ ticketId }: { ticketId: number }) {
     upload.mutate(files, { onSuccess: () => { e.target.value = '' } })
   }
 
-  if (isLoading) return <p>Loading attachments...</p>
-
   return (
-    <div style={{ margin: '1rem 0' }}>
-      <h3>Attachments</h3>
-
-      {attachments && attachments.length > 0 ? (
-        <ul>
+  <Card>
+    <CardHeader>
+      <CardTitle className="text-base">Attachments</CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      {isLoading ? (
+        <p className="text-sm text-muted-foreground">Loading attachments...</p>
+      ) : attachments && attachments.length > 0 ? (
+        <ul className="space-y-2">
           {attachments.map((attachment) => (
-            <li key={attachment.id}>
-              <button onClick={() => downloadAttachment(attachment.id, attachment.filename)}>
-                {attachment.filename}
-              </button>
-              {' '}({formatBytes(attachment.sizeBytes)}, uploaded by {attachment.uploader.name})
-              {' '}
-              <button
+            <li key={attachment.id} className="flex items-center justify-between text-sm bg-muted/50 rounded-md px-3 py-2">
+              <div>
+                <button
+                  onClick={() => downloadAttachment(attachment.id, attachment.filename)}
+                  className="font-medium text-primary hover:underline"
+                >
+                  {attachment.filename}
+                </button>
+                <p className="text-xs text-muted-foreground">
+                  {formatBytes(attachment.sizeBytes)} · uploaded by {attachment.uploader.name}
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => deleteAttachmentMutation.mutate(attachment.id)}
                 disabled={deleteAttachmentMutation.isPending}
               >
                 Delete
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No attachments yet.</p>
+        <p className="text-sm text-muted-foreground">No attachments yet.</p>
       )}
 
-      <input type="file" multiple onChange={handleFileSelect} disabled={upload.isPending} />
-      {upload.isPending && <p>Uploading...</p>}
-      {validationError && <p role="alert" style={{ color: 'red' }}>{validationError}</p>}
-      {upload.isError && <p role="alert" style={{ color: 'red' }}>Upload failed.</p>}
-    </div>
+      <div className="space-y-1.5 pt-2 border-t">
+        <label className="text-sm font-medium">Upload new file</label>
+        <Input
+          type="file"
+          multiple
+          onChange={handleFileSelect}
+          disabled={upload.isPending}
+          className="file:bg-primary file:text-primary-foreground file:border-0 file:rounded-md file:px-3 file:py-1.5 file:mr-3 file:text-sm file:font-medium file:cursor-pointer hover:file:bg-primary/90"
+        />
+        {upload.isPending && <p className="text-sm text-muted-foreground">Uploading...</p>}
+        {validationError && <p role="alert" className="text-sm text-destructive">{validationError}</p>}
+        {upload.isError && <p role="alert" className="text-sm text-destructive">Upload failed.</p>}
+      </div>
+    </CardContent>
+  </Card>
   )
 }

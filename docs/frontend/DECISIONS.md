@@ -1,5 +1,9 @@
 # Frontend Architecture Decisions
 
+## Ticket detail page: one Card per domain concern
+Each section (ticket info, SLA, actions, attachments, comments, audit trail) is its own Card, mirroring the feature-based folder structure visually - one bounded unit per concern rather
+than a single long unstyled page. Uses cn() from shadcn's generated utils for conditional classes (e.g. red border/background on SLA breach). Attachment file input styled via Tailwind's file: variant to target the browser's native ::file-selector-button independently from the "no file chosen" text.
+
 ## Base UI Select: onValueChange accepts string | null
 Unlike Radix's Select (string-only), Base UI's Select passes `string | null` to onValueChange
 (null likely on cleared selection). Handlers now guard with `if (!value) return` before using
