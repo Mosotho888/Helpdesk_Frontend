@@ -1,7 +1,13 @@
 # Frontend Architecture Decisions
 
+## Base UI Select: onValueChange accepts string | null
+Unlike Radix's Select (string-only), Base UI's Select passes `string | null` to onValueChange
+(null likely on cleared selection). Handlers now guard with `if (!value) return` before using
+the value, rather than unsafely casting. Worth remembering when migrating other native <select>
+elements to shadcn's Select going forward - check Base UI's actual type signature rather than assuming Radix's shape carries over.
+
 ## Badge colors: semantic classes over generic variants
-shadcn's default Badge variants (default/secondary/destructive/outline) are designed for generic UI actions, not domain-specific status meaning — reusing them for 5 statuses + 4 priorities caused near-identical, low-contrast colors (e.g. outline on white for both "Low priority" and "Resolved" status). Replaced with explicit semantic Tailwind classes per status/priority value (distinct hue per state, -100 background / -800 text for accessible contrast), following the standard pattern used by Jira/Linear/Zendesk for ticket status coloring.
+shadcn's default Badge variants (default/secondary/destructive/outline) are designed for generic UI actions, not domain-specific status meaning - reusing them for 5 statuses + 4 priorities caused near-identical, low-contrast colors (e.g. outline on white for both "Low priority" and "Resolved" status). Replaced with explicit semantic Tailwind classes per status/priority value (distinct hue per state, -100 background / -800 text for accessible contrast), following the standard pattern used by Jira/Linear/Zendesk for ticket status coloring.
 
 ## shadcn Select gotcha
 Base UI's Select (used by shadcn's Select component) doesn't allow an empty string as an item value - using '' for "no filter selected" silently breaks. Used the string 'ALL' as a sentinel value instead, translated to `undefined` before passing to the API call.
@@ -16,7 +22,7 @@ Using @tailwindcss/vite (not the older PostCSS-config approach) for simpler setu
 before proceeding to real component styling.
 
 ## Audit trail display
-AuditTrail fetches GET /audit/tickets/{id} and renders a chronological list of actions (formatted from raw enum values like STATUS_CHANGED → "Status Changed"). Fails silently for non-Admin/Agent viewers, consistent with the SLA component's approach - a 403 on a correctly-restricted endpoint shouldn't look like a broken feature.
+AuditTrail fetches GET /audit/tickets/{id} and renders a chronological list of actions (formatted from raw enum values like STATUS_CHANGED -> "Status Changed"). Fails silently for non-Admin/Agent viewers, consistent with the SLA component's approach - a 403 on a correctly-restricted endpoint shouldn't look like a broken feature.
 
 ## Attachments: multipart upload, blob download
 Uploads use FormData (multiple files appended under the 'file' field) rather than JSON, matching the backend's multipart/form-data contract. Client-side validation mirrors backend limits (max 5 files, 20MB each) for instant feedback before hitting the network.

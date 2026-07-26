@@ -2,6 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateTicket } from '../api/ticketApi'
 import { useAgents } from '../../agents/hooks/useAgents'
 import type { TicketResponse, TicketStatus, TicketPriority } from '../types'
+import { Card, CardContent } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 export function TicketActions({ ticket }: { ticket: TicketResponse }) {
   const queryClient = useQueryClient()
@@ -15,71 +24,85 @@ export function TicketActions({ ticket }: { ticket: TicketResponse }) {
     },
   })
 
-  function handleStatusChange(status: TicketStatus) {
-    mutation.mutate({ id: ticket.id, payload: { status } })
-  }
+  function handleStatusChange(value: string | null) {
+  if (!value) return
+  mutation.mutate({ id: ticket.id, payload: { status: value as TicketStatus } })
+}
 
-  function handlePriorityChange(priority: TicketPriority) {
-    mutation.mutate({ id: ticket.id, payload: { priority } })
-  }
+function handlePriorityChange(value: string | null) {
+  if (!value) return
+  mutation.mutate({ id: ticket.id, payload: { priority: value as TicketPriority } })
+}
 
-  function handleAssigneeChange(value: string) {
-    const assigneeId = value === '' ? undefined : Number(value)
-    mutation.mutate({ id: ticket.id, payload: { assigneeId } })
+function handleAssigneeChange(value: string | null) {
+  if (!value || value === 'UNASSIGNED') {
+    mutation.mutate({ id: ticket.id, payload: { assigneeId: undefined } })
+    return
   }
+  mutation.mutate({ id: ticket.id, payload: { assigneeId: Number(value) } })
+}
+
+  const currentAgentId =
+    agentsData?.content.find((agent) => agent.user.id === ticket.assignee?.id)?.id
 
   return (
-    <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
-      <div>
-        <label htmlFor="status-select">Status</label>
-        <select
-          id="status-select"
-          value={ticket.status}
-          onChange={(e) => handleStatusChange(e.target.value as TicketStatus)}
-          disabled={mutation.isPending}
-        >
-          <option value="OPEN">Open</option>
-          <option value="IN_PROGRESS">In Progress</option>
-          <option value="ESCALATED">Escalated</option>
-          <option value="RESOLVED">Resolved</option>
-          <option value="CLOSED">Closed</option>
-        </select>
-      </div>
+    <Card>
+      <CardContent className="flex flex-wrap gap-4 pt-6">
+        <div className="space-y-1.5">
+          <Label>Status</Label>
+          <Select value={ticket.status} onValueChange={handleStatusChange} disabled={mutation.isPending}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="OPEN">Open</SelectItem>
+              <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+              <SelectItem value="ESCALATED">Escalated</SelectItem>
+              <SelectItem value="RESOLVED">Resolved</SelectItem>
+              <SelectItem value="CLOSED">Closed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div>
-        <label htmlFor="priority-select">Priority</label>
-        <select
-          id="priority-select"
-          value={ticket.priority}
-          onChange={(e) => handlePriorityChange(e.target.value as TicketPriority)}
-          disabled={mutation.isPending}
-        >
-          <option value="LOW">Low</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="HIGH">High</option>
-          <option value="URGENT">Urgent</option>
-        </select>
-      </div>
+        <div className="space-y-1.5">
+          <Label>Priority</Label>
+          <Select value={ticket.priority} onValueChange={handlePriorityChange} disabled={mutation.isPending}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="LOW">Low</SelectItem>
+              <SelectItem value="MEDIUM">Medium</SelectItem>
+              <SelectItem value="HIGH">High</SelectItem>
+              <SelectItem value="URGENT">Urgent</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div>
-        <label htmlFor="assignee-select">Assignee</label>
-        <select
-          id="assignee-select"
-          value={agentsData?.content.find((agent) => agent.user.id === ticket.assignee?.id)?.id ?? ''}
-          onChange={(e) => handleAssigneeChange(e.target.value)}
-          disabled={mutation.isPending || agentsLoading}
-        >
-          <option value="">Unassigned</option>
-          {agentsData?.content.map((agent) => (
-            <option key={agent.id} value={agent.id}>
-              {agent.user.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className="space-y-1.5">
+          <Label>Assignee</Label>
+          <Select
+            value={currentAgentId?.toString() ?? 'UNASSIGNED'}
+            onValueChange={handleAssigneeChange}
+            disabled={mutation.isPending || agentsLoading}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="UNASSIGNED">Unassigned</SelectItem>
+              {agentsData?.content.map((agent) => (
+                <SelectItem key={agent.id} value={agent.id.toString()}>
+                  {agent.user.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      {mutation.isPending && <span>Saving...</span>}
-      {mutation.isError && <span style={{ color: 'red' }}>Failed to update</span>}
-    </div>
+        {mutation.isPending && <span className="text-sm text-muted-foreground self-end pb-2">Saving...</span>}
+        {mutation.isError && <span className="text-sm text-destructive self-end pb-2">Failed to update</span>}
+      </CardContent>
+    </Card>
   )
 }
