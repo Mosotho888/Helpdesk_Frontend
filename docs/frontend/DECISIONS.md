@@ -1,7 +1,12 @@
 # Frontend Architecture Decisions
 
+## SLA display
+SlaStatus fetches GET /tickets/{id}/sla and renders due dates + breach flags. Fails silentl (returns null) rather than showing an error, since this endpoint is Agent/Admin-only per the API spec - a USER-role 403 shouldn't look like a broken feature.
+
+Note: seeded demo tickets (inserted directly into Postgres) don't have SLA records, since they bypassed the actual ticket-creation service logic that generates them. Confirmed working correctly on tickets created through the real POST /tickets flow. Demo data seeding should be revisited to go through the API/service layer for full fidelity.
+
 ## Ticket assignment: agent id vs user id mismatch
-TicketResponse.assignee is a UserResponse (the user's own id), but UpdateTicketRequest.assigneeId expects the Agent entity's id — confirmed via a 404 "Agent not found with id: X" when sending a user id. Two places needed fixing, not just one: the dropdown's onChange/option value (submission) AND the dropdown's `value` prop (display) both need to map through agent.id, not agent.user.id. Fixing only the first left the select showing the wrong agent as "selected" even though saves worked - a reminder that a mutation succeeding doesn't mean the surrounding UI is correct. Flag to backend team as a candidate for cleanup (e.g. exposing agentId directly on TicketResponse).
+TicketResponse.assignee is a UserResponse (the user's own id), but UpdateTicketRequest.assigneeId expects the Agent entity's id - confirmed via a 404 "Agent not found with id: X" when sending a user id. Two places needed fixing, not just one: the dropdown's onChange/option value (submission) AND the dropdown's `value` prop (display) both need to map through agent.id, not agent.user.id. Fixing only the first left the select showing the wrong agent as "selected" even though saves worked - a reminder that a mutation succeeding doesn't mean the surrounding UI is correct. Flag to backend team as a candidate for cleanup (e.g. exposing agentId directly on TicketResponse).
 
 ## Ticket updates: inline, save-on-change
 Status/priority editing uses dropdowns that mutate immediately on change, rather than an explicit Edit/Save mode - matches real ticketing tool UX (Zendesk, Jira) where an agent working through a queue needs single-click updates, not a multi-step edit flow. Backend's UpdateTicketRequest supports partial updates, so each field mutates independently.
