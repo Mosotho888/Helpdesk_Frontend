@@ -4,6 +4,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { createTicket } from '../api/ticketApi'
 import { createTicketSchema, type CreateTicketFormValues } from '../schemas/createTicketSchema'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Controller } from 'react-hook-form'
 
 export function CreateTicketForm() {
   const navigate = useNavigate()
@@ -12,6 +24,7 @@ export function CreateTicketForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateTicketFormValues>({
     resolver: zodResolver(createTicketSchema),
@@ -30,42 +43,64 @@ export function CreateTicketForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '500px', padding: '2rem' }}>
-      <h1>Create Ticket</h1>
+    <div className="max-w-lg mx-auto p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Create Ticket</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="subject">Subject</Label>
+              <Input id="subject" {...register('subject')} />
+              {errors.subject && <p role="alert" className="text-sm text-destructive">{errors.subject.message}</p>}
+            </div>
 
-      <div>
-        <label htmlFor="subject">Subject</label>
-        <input id="subject" {...register('subject')} />
-        {errors.subject && <p role="alert" style={{ color: 'red' }}>{errors.subject.message}</p>}
-      </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="description">Description</Label>
+              <textarea
+                id="description"
+                rows={5}
+                {...register('description')}
+                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              />
+              {errors.description && <p role="alert" className="text-sm text-destructive">{errors.description.message}</p>}
+            </div>
 
-      <div>
-        <label htmlFor="description">Description</label>
-        <textarea id="description" rows={5} {...register('description')} />
-        {errors.description && <p role="alert" style={{ color: 'red' }}>{errors.description.message}</p>}
-      </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="priority">Priority</Label>
+              <Controller
+                name="priority"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value ?? ''} onValueChange={field.onChange}>
+                    <SelectTrigger id="priority" className="w-full">
+                      <SelectValue placeholder="Select priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="LOW">Low</SelectItem>
+                      <SelectItem value="MEDIUM">Medium</SelectItem>
+                      <SelectItem value="HIGH">High</SelectItem>
+                      <SelectItem value="URGENT">Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
 
-      <div>
-        <label htmlFor="priority">Priority</label>
-        <select id="priority" {...register('priority')}>
-          <option value="">Select priority</option>
-          <option value="LOW">Low</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="HIGH">High</option>
-          <option value="URGENT">Urgent</option>
-        </select>
-      </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="category">Category</Label>
+              <Input id="category" {...register('category')} />
+            </div>
 
-      <div>
-        <label htmlFor="category">Category</label>
-        <input id="category" {...register('category')} />
-      </div>
+            {mutation.isError && <p role="alert" className="text-sm text-destructive">Failed to create ticket. Please try again.</p>}
 
-      {mutation.isError && <p role="alert" style={{ color: 'red' }}>Failed to create ticket. Please try again.</p>}
-
-      <button type="submit" disabled={isSubmitting || mutation.isPending}>
-        {mutation.isPending ? 'Creating...' : 'Create Ticket'}
-      </button>
-    </form>
+            <Button type="submit" disabled={isSubmitting || mutation.isPending} className="w-full">
+              {mutation.isPending ? 'Creating...' : 'Create Ticket'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

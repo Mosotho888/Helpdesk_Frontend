@@ -1,5 +1,8 @@
 # Frontend Architecture Decisions
 
+## Login page and Create Ticket form: consistent Card/Input/Label/Button styling
+Both restyled with the same shadcn primitives used throughout the app. CreateTicketForm's priority Select required wrapping in React Hook Form's Controller, since shadcn's Select is a fully controlled component (value/onValueChange) with no raw DOM input for register() to attach to - Controller bridges React Hook Form's internal state to any controlled component.
+
 ## Base UI composition: render prop, not asChild
 Base UI components use a `render` prop for polymorphic rendering (e.g. making a Button render
 as a React Router Link), unlike Radix's `asChild` + child-element pattern. Usage: `<Button render={<Link to="/path" />}>Text</Button>` — the element passed to `render` receives the Button's merged props/styling; `children` stays as the visible content. Third Base UI API difference encountered so far (after Select's string|null value and this) - worth checking Base UI's actual API before assuming Radix conventions carry over when something breaks.
