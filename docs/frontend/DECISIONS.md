@@ -1,5 +1,10 @@
 # Frontend Architecture Decisions
 
+## shadcn/ui setup: Base UI + Nova preset
+Chose Base UI over Radix as the primitive layer — as of mid-2026, shadcn/ui defaults to Base UI for new projects since Radix's development has slowed following its acquisition by WorkOS, while Base UI is actively maintained by the MUI team. Chose the Nova visual preset (tighter spacing, higher density) over softer alternatives (Maia, Luma) since the app is data-heavy (ticket tables, stacked detail-page sections) and benefits from showing more content per screen.
+
+Gotcha: shadcn's CLI validated the tsconfig.app.json path alias correctly, but its own file-writer only reads the root tsconfig.json directly — resulting in generated files landing in a literal "./@/..." folder instead of "./src/...". Fixed by duplicating the baseUrl/paths config into the root tsconfig.json as well, satisfying both the CLI's file-writer and the actual TypeScript compiler (which correctly uses tsconfig.app.json).
+
 ## Styling: Tailwind CSS via Vite plugin
 Using @tailwindcss/vite (not the older PostCSS-config approach) for simpler setup. Tailwind import lives in src/index.css, which must be imported in main.tsx — this import was initially missing after main.tsx was rewritten for QueryClientProvider setup, causing Tailwind classes to have zero effect despite correct plugin/config. Confirmed working via a visible color/weight test
 before proceeding to real component styling.
