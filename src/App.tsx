@@ -6,6 +6,8 @@ import { TicketTable } from './features/tickets/components/TicketTable'
 import { TicketDetail } from './features/tickets/components/TicketDetail'
 import { Header } from './shared/components/Header'
 import { CreateTicketForm } from './features/tickets/components/CreateTicketForm'
+import { AdminRoute } from './routes/AdminRoute'
+import { UserManagement } from './features/users/components/UserManagement'
 
 function App() {
   return (
@@ -20,6 +22,15 @@ function App() {
                 <Header />
                 <TicketTable />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <Header />
+                <UserManagement />
+              </AdminRoute>
             }
           />
           <Route

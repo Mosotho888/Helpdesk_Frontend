@@ -1,5 +1,10 @@
 # Frontend Architecture Decisions
 
+## User Administration
+New AdminRoute wrapper (checks user.role === 'ADMIN' in addition to auth) protects /admin/users, redirecting non-admins to the ticket table rather than showing a broken 403-riddled page. UserManagement reuses the same TanStack Table + Select-mutation pattern from TicketActions; CreateUserDialog uses shadcn's Dialog with the Base UI render prop for the trigger button (same pattern as Header's Link button).
+
+Note: changeRole's `role` is a query parameter per the OpenAPI spec, not a JSON body field - unlike nearly every other mutation in this app. Axios call passes null as body, role in `params`, easy to miss if assuming all POST/PATCH bodies are JSON.
+
 ## Login page and Create Ticket form: consistent Card/Input/Label/Button styling
 Both restyled with the same shadcn primitives used throughout the app. CreateTicketForm's priority Select required wrapping in React Hook Form's Controller, since shadcn's Select is a fully controlled component (value/onValueChange) with no raw DOM input for register() to attach to - Controller bridges React Hook Form's internal state to any controlled component.
 
