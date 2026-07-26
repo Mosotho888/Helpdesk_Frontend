@@ -1,5 +1,6 @@
 import { useAuth } from '../../features/auth/context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 
 export function Header() {
   const { user, logout } = useAuth()
@@ -11,12 +12,20 @@ export function Header() {
   }
 
   return (
-    <header style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid #ccc' }}>
-      <span>GovHelpDesk</span>
-      <div>
-        <span style={{ marginRight: '1rem' }}>{user?.name} ({user?.role})</span>
-        <Link to="/tickets/new" style={{ marginRight: '1rem' }}>New Ticket</Link>
-        <button onClick={handleLogout}>Log out</button>
+    <header className="flex items-center justify-between px-6 py-4 border-b bg-background">
+      <Link to="/" className="font-semibold text-lg">
+        GovHelpDesk
+      </Link>
+      <div className="flex items-center gap-4">
+        <Button variant="outline" size="sm" render={<Link to="/tickets/new" />}>
+          New Ticket
+        </Button>
+        <span className="text-sm text-muted-foreground">
+          {user?.name} <span className="text-xs">({user?.role})</span>
+        </span>
+        <Button variant="ghost" size="sm" onClick={handleLogout}>
+          Log out
+        </Button>
       </div>
     </header>
   )

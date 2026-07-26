@@ -1,5 +1,9 @@
 # Frontend Architecture Decisions
 
+## Base UI composition: render prop, not asChild
+Base UI components use a `render` prop for polymorphic rendering (e.g. making a Button render
+as a React Router Link), unlike Radix's `asChild` + child-element pattern. Usage: `<Button render={<Link to="/path" />}>Text</Button>` — the element passed to `render` receives the Button's merged props/styling; `children` stays as the visible content. Third Base UI API difference encountered so far (after Select's string|null value and this) - worth checking Base UI's actual API before assuming Radix conventions carry over when something breaks.
+
 ## Ticket detail page: one Card per domain concern
 Each section (ticket info, SLA, actions, attachments, comments, audit trail) is its own Card, mirroring the feature-based folder structure visually - one bounded unit per concern rather
 than a single long unstyled page. Uses cn() from shadcn's generated utils for conditional classes (e.g. red border/background on SLA breach). Attachment file input styled via Tailwind's file: variant to target the browser's native ::file-selector-button independently from the "no file chosen" text.
