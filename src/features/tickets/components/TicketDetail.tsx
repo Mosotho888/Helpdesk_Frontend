@@ -4,6 +4,7 @@ import { CommentList } from '../../comments/components/CommentList'
 import { TicketActions } from './TicketActions'
 import { SlaStatus } from '../../sla/components/SlaStatus'
 import { AttachmentList } from '../../attachments/components/AttachmentList'
+import { AuditTrail } from '../../audit/components/AuditTrail'
 
 export function TicketDetail() {
   const { id } = useParams<{ id: string }>()
@@ -28,6 +29,7 @@ export function TicketDetail() {
       <AttachmentList ticketId={ticket.id} />
       <TicketActions ticket={ticket} />
       <CommentList ticketId={ticketId} />
+      <AuditTrail ticketId={ticket.id} />
     </div>
   )
 }

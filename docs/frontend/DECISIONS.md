@@ -1,5 +1,8 @@
 # Frontend Architecture Decisions
 
+## Audit trail display
+AuditTrail fetches GET /audit/tickets/{id} and renders a chronological list of actions (formatted from raw enum values like STATUS_CHANGED → "Status Changed"). Fails silently for non-Admin/Agent viewers, consistent with the SLA component's approach - a 403 on a correctly-restricted endpoint shouldn't look like a broken feature.
+
 ## Attachments: multipart upload, blob download
 Uploads use FormData (multiple files appended under the 'file' field) rather than JSON, matching the backend's multipart/form-data contract. Client-side validation mirrors backend limits (max 5 files, 20MB each) for instant feedback before hitting the network.
 
