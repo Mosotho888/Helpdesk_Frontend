@@ -3,6 +3,7 @@ import { useTicket } from '../hooks/useTicket'
 import { CommentList } from '../../comments/components/CommentList'
 import { TicketActions } from './TicketActions'
 import { SlaStatus } from '../../sla/components/SlaStatus'
+import { AttachmentList } from '../../attachments/components/AttachmentList'
 
 export function TicketDetail() {
   const { id } = useParams<{ id: string }>()
@@ -24,6 +25,7 @@ export function TicketDetail() {
       <p>Assignee: {ticket.assignee?.name ?? 'Unassigned'}</p>
       <p>Created: {new Date(ticket.createdAt).toLocaleString()}</p>
       <SlaStatus ticketId={ticket.id} />
+      <AttachmentList ticketId={ticket.id} />
       <TicketActions ticket={ticket} />
       <CommentList ticketId={ticketId} />
     </div>

@@ -1,5 +1,11 @@
 # Frontend Architecture Decisions
 
+## Attachments: multipart upload, blob download
+Uploads use FormData (multiple files appended under the 'file' field) rather than JSON, matching the backend's multipart/form-data contract. Client-side validation mirrors backend limits (max 5 files, 20MB each) for instant feedback before hitting the network.
+
+Downloads use responseType: 'blob' since the endpoint returns raw binary, then trigger a save via
+a programmatically-clicked hidden <a> tag with a download attribute and object URL - the standard browser pattern for saving API-returned binary data, since JS can't directly write files.
+
 ## SLA display
 SlaStatus fetches GET /tickets/{id}/sla and renders due dates + breach flags. Fails silentl (returns null) rather than showing an error, since this endpoint is Agent/Admin-only per the API spec - a USER-role 403 shouldn't look like a broken feature.
 
