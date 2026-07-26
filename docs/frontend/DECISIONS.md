@@ -1,5 +1,11 @@
 # Frontend Architecture Decisions
 
+## Badge colors: semantic classes over generic variants
+shadcn's default Badge variants (default/secondary/destructive/outline) are designed for generic UI actions, not domain-specific status meaning — reusing them for 5 statuses + 4 priorities caused near-identical, low-contrast colors (e.g. outline on white for both "Low priority" and "Resolved" status). Replaced with explicit semantic Tailwind classes per status/priority value (distinct hue per state, -100 background / -800 text for accessible contrast), following the standard pattern used by Jira/Linear/Zendesk for ticket status coloring.
+
+## shadcn Select gotcha
+Base UI's Select (used by shadcn's Select component) doesn't allow an empty string as an item value - using '' for "no filter selected" silently breaks. Used the string 'ALL' as a sentinel value instead, translated to `undefined` before passing to the API call.
+
 ## shadcn/ui setup: Base UI + Nova preset
 Chose Base UI over Radix as the primitive layer — as of mid-2026, shadcn/ui defaults to Base UI for new projects since Radix's development has slowed following its acquisition by WorkOS, while Base UI is actively maintained by the MUI team. Chose the Nova visual preset (tighter spacing, higher density) over softer alternatives (Maia, Luma) since the app is data-heavy (ticket tables, stacked detail-page sections) and benefits from showing more content per screen.
 
