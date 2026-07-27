@@ -1,5 +1,10 @@
 # Frontend Architecture Decisions
 
+## Audit Reports: three parallel queries, one active
+AuditReports runs useAuthLogs/useLogsByActor/useLogsByAction simultaneously via three separate useQuery hooks, but only the one matching the current reportType has enabled: true - the others sit idle. Simpler than dynamically constructing one conditional query; the small cost is two harmless idle hooks. formatAction extracted from AuditTrail into a shared util once needed in a second place, avoiding duplicated logic.
+
+Fourth occurrence of the Base UI Select string | null onValueChange signature in this codebase (after TicketActions x2, UserManagement/AgentManagement roles). Consistent fix applied: guard with `if (!value) return` before using the value.
+
 ## Agent Management
 AgentManagement table reuses the inline-Select-mutation pattern from TicketActions/UserManagement. Department field uses an uncontrolled input (defaultValue + onBlur) rather than controlled value + onChange, since saving on every keystroke would be wasteful - only commits on blur, and skips the mutation entirely if the value didn't actually change.
 

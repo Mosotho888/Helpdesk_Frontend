@@ -1,12 +1,6 @@
 import { useTicketAuditLogs } from '../hooks/useTicketAuditLogs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-function formatAction(action: string): string {
-  return action
-    .split('_')
-    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
-    .join(' ')
-}
+import { formatAction } from '../utils/formatAction'
 
 export function AuditTrail({ ticketId }: { ticketId: number }) {
   const { data: logs, isLoading, isError } = useTicketAuditLogs(ticketId)

@@ -10,6 +10,7 @@ import { AdminRoute } from './routes/AdminRoute'
 import { UserManagement } from './features/users/components/UserManagement'
 import { ProfileSettings } from './features/users/components/ProfileSettings'
 import { AgentManagement } from './features/agents/components/AgentManagement'
+import { AuditReports } from './features/audit/components/AuditReports'
 
 function App() {
   return (
@@ -41,6 +42,15 @@ function App() {
               <AdminRoute>
                 <Header />
                 <UserManagement />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/audit"
+            element={
+              <AdminRoute>
+                <Header />
+                <AuditReports />
               </AdminRoute>
             }
           />

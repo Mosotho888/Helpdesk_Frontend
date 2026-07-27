@@ -22,3 +22,15 @@ export interface AuditLogResponse {
   description: string | null
   createdAt: string
 }
+
+export interface PageAuditLogResponse {
+  totalElements: number
+  totalPages: number
+  size: number
+  content: AuditLogResponse[]
+  number: number
+  first: boolean
+  last: boolean
+  numberOfElements: number
+  empty: boolean
+}
