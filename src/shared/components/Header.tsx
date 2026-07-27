@@ -17,6 +17,9 @@ export function Header() {
         GovHelpDesk
       </Link>
       <div className="flex items-center gap-4">
+        <Button variant="outline" size="sm" render={<Link to="/admin/agents" />}>
+          Manage Agents
+        </Button>
         {user?.role === 'ADMIN' && (
           <Button variant="outline" size="sm" render={<Link to="/admin/users" />}>
             Manage Users

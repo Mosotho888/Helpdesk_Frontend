@@ -11,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { getAvailabilityBadgeClasses } from '../../agents/utils/badgeVariants'
+import { Badge } from '@/components/ui/badge'
 
 export function TicketActions({ ticket }: { ticket: TicketResponse }) {
   const queryClient = useQueryClient()
@@ -93,7 +95,12 @@ function handleAssigneeChange(value: string | null) {
               <SelectItem value="UNASSIGNED">Unassigned</SelectItem>
               {agentsData?.content.map((agent) => (
                 <SelectItem key={agent.id} value={agent.id.toString()}>
-                  {agent.user.name}
+                  <span className="flex items-center gap-2">
+                    {agent.user.name}
+                    <Badge className={`text-xs ${getAvailabilityBadgeClasses(agent.availability)}`}>
+                      {agent.availability ?? 'OFFLINE'}
+                    </Badge>
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>

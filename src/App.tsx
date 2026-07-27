@@ -9,6 +9,7 @@ import { CreateTicketForm } from './features/tickets/components/CreateTicketForm
 import { AdminRoute } from './routes/AdminRoute'
 import { UserManagement } from './features/users/components/UserManagement'
 import { ProfileSettings } from './features/users/components/ProfileSettings'
+import { AgentManagement } from './features/agents/components/AgentManagement'
 
 function App() {
   return (
@@ -23,6 +24,15 @@ function App() {
                 <Header />
                 <TicketTable />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/agents"
+            element={
+              <AdminRoute>
+                <Header />
+                <AgentManagement />
+              </AdminRoute>
             }
           />
           <Route

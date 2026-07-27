@@ -1,5 +1,15 @@
 # Frontend Architecture Decisions
 
+## Agent Management
+AgentManagement table reuses the inline-Select-mutation pattern from TicketActions/UserManagement. Department field uses an uncontrolled input (defaultValue + onBlur) rather than controlled value + onChange, since saving on every keystroke would be wasteful - only commits on blur, and skips the mutation entirely if the value didn't actually change.
+
+AgentStatsDialog only fetches stats once opened (enabled: open passed into useAgentStats), not on table row mount - avoids N wasted API calls just from rendering the agent list.
+
+CreateAgentDialog cross-references useUsers + useAgentsList client-side (no dedicated "users who aren't agents" endpoint) to filter the eligible-user dropdown to non-agents only.
+
+## Bug: AgentStatsResponse.avgResolutionHours can be null despite spec typing it as non-nullable number
+An agent with zero resolved tickets returns avgResolutionHours: null from the backend, but the OpenAPI spec has no nullable marker on this field - a spec/reality mismatch, not a frontend bug. Calling .toFixed() on null crashed the whole app with a blank white screen (no error boundary existed yet). Fixed the type to `number | null`, added a graceful "N/A" fallback in the display, AND added a global ErrorBoundary component wrapping the app in main.tsx - so any future uncaught error shows a contained message instead of unmounting the entire React tree.
+
 ## Profile settings: two forms, one page
 ProfileInfoForm pre-fills via useEffect + reset() once the async profile query resolves (can't pass defaultValues synchronously since the data doesn't exist on first render). isDirty gates the Save button so users can't submit an unchanged form.
 
