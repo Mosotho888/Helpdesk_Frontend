@@ -1,5 +1,15 @@
 # Frontend Architecture Decisions
 
+## Profile settings: two forms, one page
+ProfileInfoForm pre-fills via useEffect + reset() once the async profile query resolves (can't pass defaultValues synchronously since the data doesn't exist on first render). isDirty gates the Save button so users can't submit an unchanged form.
+
+ChangePasswordForm uses Zod's .refine() for cross-field validation (newPassword must match confirmPassword) - a validation rule that spans two fields, which per-field rules can't express.
+
+## Bug: wrong-password 401 triggered refresh-retry cascade
+PATCH /users/me/password returning 401 for a genuinely wrong current password was being caught by the Axios interceptor's generic "401 = expired token, try refreshing" logic - since only /auth/login and /auth/refresh were excluded from that behavior. This caused a slow cascade (refresh succeeds since the session IS valid, retry fails again with 401, repeat) ending in an unexpected logout/redirect, instead of a clean, immediate error message. Fixed by adding /users/me/password to the interceptor's exclusion list.
+
+This is the second endpoint requiring this exclusion (after /auth/login) - if a third one comes up, consider replacing URL-string-matching with an explicit per-request opt-out flag (e.g. { skipAuthRetry: true }) rather than growing a list of hardcoded substrings.
+
 ## User Administration
 New AdminRoute wrapper (checks user.role === 'ADMIN' in addition to auth) protects /admin/users, redirecting non-admins to the ticket table rather than showing a broken 403-riddled page. UserManagement reuses the same TanStack Table + Select-mutation pattern from TicketActions; CreateUserDialog uses shadcn's Dialog with the Base UI render prop for the trigger button (same pattern as Header's Link button).
 

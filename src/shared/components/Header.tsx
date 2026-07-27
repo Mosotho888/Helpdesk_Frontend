@@ -25,9 +25,9 @@ export function Header() {
         <Button variant="outline" size="sm" render={<Link to="/tickets/new" />}>
           New Ticket
         </Button>
-        <span className="text-sm text-muted-foreground">
+        <Link to="/profile" className="text-sm text-muted-foreground hover:underline">
           {user?.name} <span className="text-xs">({user?.role})</span>
-        </span>
+        </Link>
         <Button variant="ghost" size="sm" onClick={handleLogout}>
           Log out
         </Button>

@@ -8,6 +8,7 @@ import { Header } from './shared/components/Header'
 import { CreateTicketForm } from './features/tickets/components/CreateTicketForm'
 import { AdminRoute } from './routes/AdminRoute'
 import { UserManagement } from './features/users/components/UserManagement'
+import { ProfileSettings } from './features/users/components/ProfileSettings'
 
 function App() {
   return (
@@ -48,6 +49,15 @@ function App() {
               <ProtectedRoute>
                 <Header />
                 <CreateTicketForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Header />
+                <ProfileSettings />
               </ProtectedRoute>
             }
           />
