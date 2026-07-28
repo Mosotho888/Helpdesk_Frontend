@@ -1,7 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getUsers, createUser, changeUserRole, deactivateUser, reactivateUser } from '../api/userApi'
+import { getUsers, createUser, changeUserRole, deactivateUser, reactivateUser, adminResetPassword } from '../api/userApi'
 import type { CreateUserRequest } from '../types'
+import type { AdminPasswordResetRequest } from '../api/userApi'
 
+export function useAdminResetPassword() {
+  return useMutation({
+    mutationFn: ({ userId, payload }: { userId: number; payload: AdminPasswordResetRequest }) =>
+      adminResetPassword(userId, payload),
+  })
+}
 export function useUsers(page = 0, size = 20) {
   return useQuery({
     queryKey: ['users', page, size],

@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { AdminResetPasswordDialog } from './AdminResetPasswordDialog'
 
 export function UserManagement() {
   const [page, setPage] = useState(0)
@@ -93,6 +94,7 @@ export function UserManagement() {
                       Reactivate
                     </Button>
                   )}
+                  <AdminResetPasswordDialog userId={u.id} userName={u.name} />
                 </TableCell>
               </TableRow>
             ))}

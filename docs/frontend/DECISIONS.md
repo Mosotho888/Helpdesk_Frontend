@@ -1,5 +1,13 @@
 # Frontend Architecture Decisions
 
+## Auth-retry exclusions: URL matching, refactor deferred
+The Axios interceptor now excludes 5 URLs from refresh-retry behavior (/auth/login, /auth/refresh, /users/me/password, /auth/password-reset/request, /auth/password-reset/confirm). A cleaner per-request `skipAuthRetry` flag (via TypeScript module augmentation on AxiosRequestConfig) was scoped out as the next step once this pattern kept recurring, but deferred to a future version rather than refactoring mid-feature. TODO: implement the typed flag, remove the URL-matching list, before adding a 6th exclusion.
+
+## Password reset: public OTP flow + admin override
+ForgotPasswordPage is a two-step flow (request -> confirm) sharing one component with a step state, since the email needs to carry over between steps. onRequestSubmit's catch block deliberately always advances to the confirm step even on error - mirroring the backend's own documented behavior of always returning 200 to prevent user enumeration; the frontend intentionally doesn't leak whether an email exists either.
+
+AdminResetPasswordDialog lets an admin reset any user's password without requiring their current one (for locked-out users) - inlined its Zod schema rather than extracting to a shared file, since it's small and single-use, unlike createUserSchema which serves a more reusable domain (ticket creation could plausibly need similar validation elsewhere later).
+
 ## Audit Reports: three parallel queries, one active
 AuditReports runs useAuthLogs/useLogsByActor/useLogsByAction simultaneously via three separate useQuery hooks, but only the one matching the current reportType has enabled: true - the others sit idle. Simpler than dynamically constructing one conditional query; the small cost is two harmless idle hooks. formatAction extracted from AuditTrail into a shared util once needed in a second place, avoiding duplicated logic.
 

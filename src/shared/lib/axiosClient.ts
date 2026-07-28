@@ -52,7 +52,9 @@ apiClient.interceptors.response.use(
     const isAuthEndpoint = 
       requestUrl.includes('/auth/login') || 
       requestUrl.includes('/auth/refresh') ||
-      requestUrl.includes('/users/me/password')
+      requestUrl.includes('/users/me/password') ||
+      requestUrl.includes('/auth/password-reset/request') ||
+      requestUrl.includes('/auth/password-reset/confirm')
 
     if (error.response?.status === 401 && !isAuthEndpoint && originalRequest) {
       // Only one refresh call in flight at a time; others wait on the same promise

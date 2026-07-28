@@ -11,6 +11,7 @@ import { UserManagement } from './features/users/components/UserManagement'
 import { ProfileSettings } from './features/users/components/ProfileSettings'
 import { AgentManagement } from './features/agents/components/AgentManagement'
 import { AuditReports } from './features/audit/components/AuditReports'
+import { ForgotPasswordPage } from './features/auth/components/ForgotPasswordPage'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route
             path="/"
             element={

@@ -14,6 +14,24 @@ export interface AuthResponse {
   user: UserResponse
 }
 
+export interface PasswordResetRequest {
+  email: string
+}
+
+export interface PasswordResetConfirmRequest {
+  email: string
+  otp: string
+  newPassword: string
+}
+
+export async function requestPasswordReset(email: string): Promise<void> {
+  await apiClient.post('/auth/password-reset/request', { email })
+}
+
+export async function confirmPasswordReset(payload: PasswordResetConfirmRequest): Promise<void> {
+  await apiClient.post('/auth/password-reset/confirm', payload)
+}
+
 export async function login(credentials: LoginRequest): Promise<AuthResponse> {
   const response = await apiClient.post<AuthResponse>('/auth/login', credentials)
   return response.data

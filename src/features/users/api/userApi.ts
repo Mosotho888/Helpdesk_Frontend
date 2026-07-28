@@ -2,6 +2,15 @@ import apiClient from '../../../shared/lib/axiosClient'
 import type { UserResponse, PageUserResponse, CreateUserRequest } from '../types'
 import type { UpdateUserRequest } from '../types'
 
+export interface AdminPasswordResetRequest {
+  newPassword: string
+  reason?: string
+}
+
+export async function adminResetPassword(userId: number, payload: AdminPasswordResetRequest): Promise<void> {
+  await apiClient.patch(`/admin/users/${userId}/password`, payload)
+}
+
 export async function getUsers(page = 0, size = 20): Promise<PageUserResponse> {
   const response = await apiClient.get<PageUserResponse>('/users', {
     params: { page, size },

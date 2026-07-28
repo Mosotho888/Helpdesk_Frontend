@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { isAxiosError } from 'axios'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -67,6 +67,9 @@ export function LoginPage() {
               {isSubmitting ? 'Logging in...' : 'Log in'}
             </Button>
           </form>
+          <Link to="/forgot-password" className="text-sm text-muted-foreground hover:underline block text-center mt-4">
+            Forgot password?
+          </Link>
         </CardContent>
       </Card>
     </div>
