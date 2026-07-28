@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getComments, addComment } from '../api/commentApi'
+import { getComments, addComment, addReply } from '../api/commentApi'
 import type { CommentType } from '../types'
 
 export function useComments(ticketId: number) {
@@ -16,6 +16,16 @@ export function useAddComment(ticketId: number) {
   return useMutation({
     mutationFn: (params: { body: string; internal?: boolean; type?: CommentType }) =>
       addComment({ ticketId, ...params }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', ticketId] })
+    },
+  })
+}
+
+export function useAddReply(ticketId: number) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ commentId, body }: { commentId: number; body: string }) => addReply(commentId, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments', ticketId] })
     },

@@ -1,5 +1,10 @@
 # Frontend Architecture Decisions
 
+## Comments: internal/type fields and threaded replies now fully wired
+CommentList's top-level form now sends type (REPLY/NOTE/RESOLUTION) and internal - previously silently dropped despite existing in CreateCommentRequest/the API layer. internal checkbox only rendered for AGENT/ADMIN roles, with a defense-in-depth `canMarkInternal ? internal : false` ensuring a USER's submission is always non-internal regardless of any client-side tampering.
+
+Replies now use the correct dedicated endpoint (POST /comments/{commentId}/replies) via a new useAddReply mutation, rather than incorrectly reusing the top-level addComment mutation - true threading now works, not just visual nesting of what was actually a flat list. Comment component threads ticketId through every recursive call so replies invalidate the correct cache key.
+
 ## Auth-retry exclusions: URL matching, refactor deferred
 The Axios interceptor now excludes 5 URLs from refresh-retry behavior (/auth/login, /auth/refresh, /users/me/password, /auth/password-reset/request, /auth/password-reset/confirm). A cleaner per-request `skipAuthRetry` flag (via TypeScript module augmentation on AxiosRequestConfig) was scoped out as the next step once this pattern kept recurring, but deferred to a future version rather than refactoring mid-feature. TODO: implement the typed flag, remove the URL-matching list, before adding a 6th exclusion.
 
