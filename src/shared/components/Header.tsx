@@ -18,21 +18,21 @@ export function Header() {
       </Link>
       <div className="flex items-center gap-4">
         {user?.role === 'ADMIN' && (
-          <Button variant="outline" size="sm" render={<Link to="/admin/agents" />}>
+          <Button variant="outline" size="sm" nativeButton={false} render={<Link to="/admin/agents" />}>
             Manage Agents
           </Button>
         )}
         {user?.role === 'ADMIN' && (
-          <Button variant="outline" size="sm" render={<Link to="/admin/users" />}>
+          <Button variant="outline" size="sm" nativeButton={false} render={<Link to="/admin/users" />}>
             Manage Users
           </Button>
         )}
         {user?.role === 'ADMIN' && (
-          <Button variant="outline" size="sm" render={<Link to="/admin/audit" />}>
+          <Button variant="outline" size="sm" nativeButton={false} render={<Link to="/admin/audit" />}>
             Audit Reports
           </Button>
         )}
-        <Button variant="outline" size="sm" render={<Link to="/tickets/new" />}>
+        <Button variant="outline" size="sm" nativeButton={false} render={<Link to="/tickets/new" />}>
           New Ticket
         </Button>
         <Link to="/profile" className="text-sm text-muted-foreground hover:underline">
