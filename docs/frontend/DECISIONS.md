@@ -1,5 +1,11 @@
 # Frontend Architecture Decisions
 
+## Comment edit/delete
+Added PUT/DELETE /comments/{commentId} support — genuine gaps found while cross-checking the full OpenAPI spec after finishing the initial comment/reply work. canEditOrDelete mirrors the backend's own rule (author within 15 minutes, or admin anytime) client-side purely as a UX nicety to hide buttons that would otherwise just fail - actual enforcement stays server-side. Uses native confirm() for delete confirmation rather than a custom dialog, a reasonable simplification for a single destructive action; a shadcn AlertDialog would be the natural upgrade if more confirmation flows are needed later.
+
+## Role-gated ticket detail sections
+TicketDetail now hides SlaStatus, TicketActions, and AuditTrail entirely for USER-role viewers (computed once via isAuthorized, reused across all three) - these sections are Agent/Admin-only per the API and would otherwise show broken/silently-failing UI. AttachmentList and CommentList remain visible to all roles, since both are legitimately usable by a ticket's own requester.
+
 ## Comments: internal/type fields and threaded replies now fully wired
 CommentList's top-level form now sends type (REPLY/NOTE/RESOLUTION) and internal - previously silently dropped despite existing in CreateCommentRequest/the API layer. internal checkbox only rendered for AGENT/ADMIN roles, with a defense-in-depth `canMarkInternal ? internal : false` ensuring a USER's submission is always non-internal regardless of any client-side tampering.
 

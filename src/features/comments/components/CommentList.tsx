@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useComments, useAddComment, useAddReply } from '../hooks/useComments'
+import { useComments, useAddComment, useAddReply, useUpdateComment, useDeleteComment } from '../hooks/useComments'
 import { useAuth } from '../../auth/context/AuthContext'
 import type { CommentResponse, CommentType } from '../types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -14,10 +14,25 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+function canEditOrDelete(comment: CommentResponse, userId: number | undefined, userRole: string | undefined): boolean {
+  if (userRole === 'ADMIN') return true
+  if (comment.author.id !== userId) return false
+  const fifteenMinutesMs = 15 * 60 * 1000
+  const commentAge = Date.now() - new Date(comment.createdAt).getTime()
+  return commentAge < fifteenMinutesMs
+}
+
 function Comment({ comment, ticketId }: { comment: CommentResponse; ticketId: number }) {
+  const { user } = useAuth()
   const [replying, setReplying] = useState(false)
+  const [editing, setEditing] = useState(false)
   const [replyBody, setReplyBody] = useState('')
+  const [editBody, setEditBody] = useState(comment.body)
   const addReply = useAddReply(ticketId)
+  const updateComment = useUpdateComment(ticketId)
+  const deleteComment = useDeleteComment(ticketId)
+
+  const canModify = canEditOrDelete(comment, user?.id, user?.role)
 
   function handleReplySubmit(e: FormEvent) {
     e.preventDefault()
@@ -26,6 +41,20 @@ function Comment({ comment, ticketId }: { comment: CommentResponse; ticketId: nu
       { commentId: comment.id, body: replyBody },
       { onSuccess: () => { setReplyBody(''); setReplying(false) } }
     )
+  }
+
+  function handleEditSubmit(e: FormEvent) {
+    e.preventDefault()
+    if (!editBody.trim()) return
+    updateComment.mutate(
+      { commentId: comment.id, body: editBody },
+      { onSuccess: () => setEditing(false) }
+    )
+  }
+
+  function handleDelete() {
+    if (!confirm('Delete this comment? This cannot be undone.')) return
+    deleteComment.mutate(comment.id)
   }
 
   return (
@@ -41,19 +70,41 @@ function Comment({ comment, ticketId }: { comment: CommentResponse; ticketId: nu
           </Badge>
         )}
         {comment.type !== 'REPLY' && (
-          <Badge variant="outline" className="ml-2">
-            {comment.type}
-          </Badge>
+          <Badge variant="outline" className="ml-2">{comment.type}</Badge>
         )}
       </div>
-      <p className="text-sm mt-1">{comment.body}</p>
 
-      <button
-        onClick={() => setReplying((r) => !r)}
-        className="text-xs text-primary hover:underline mb-2"
-      >
-        {replying ? 'Cancel' : 'Reply'}
-      </button>
+      {editing ? (
+        <form onSubmit={handleEditSubmit} className="flex gap-2 mt-1 mb-2">
+          <input
+            value={editBody}
+            onChange={(e) => setEditBody(e.target.value)}
+            className="flex-1 rounded-md border border-input bg-transparent px-3 py-1.5 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          />
+          <Button type="submit" size="sm" disabled={updateComment.isPending}>Save</Button>
+          <Button type="button" variant="ghost" size="sm" onClick={() => { setEditing(false); setEditBody(comment.body) }}>
+            Cancel
+          </Button>
+        </form>
+      ) : (
+        <p className="text-sm mt-1">{comment.body}</p>
+      )}
+
+      <div className="flex gap-3 mb-2">
+        <button onClick={() => setReplying((r) => !r)} className="text-xs text-primary hover:underline">
+          {replying ? 'Cancel' : 'Reply'}
+        </button>
+        {canModify && !editing && (
+          <>
+            <button onClick={() => setEditing(true)} className="text-xs text-primary hover:underline">
+              Edit
+            </button>
+            <button onClick={handleDelete} className="text-xs text-destructive hover:underline">
+              Delete
+            </button>
+          </>
+        )}
+      </div>
 
       {replying && (
         <form onSubmit={handleReplySubmit} className="flex gap-2 mb-3">
@@ -81,7 +132,7 @@ export function CommentList({ ticketId }: { ticketId: number }) {
   const addComment = useAddComment(ticketId)
   const { user } = useAuth()
   const [body, setBody] = useState('')
-  const [type, setType] = useState<CommentType>('REPLY')
+  const [type, setType] = useState<CommentType>('NOTE')
   const [internal, setInternal] = useState(false)
 
   const canMarkInternal = user?.role === 'AGENT' || user?.role === 'ADMIN'

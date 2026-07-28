@@ -8,10 +8,14 @@ import { AttachmentList } from '../../attachments/components/AttachmentList'
 import { TicketActions } from './TicketActions'
 import { CommentList } from '../../comments/components/CommentList'
 import { AuditTrail } from '../../audit/components/AuditTrail'
+import { useAuth } from '../../auth/context/AuthContext'
 
 export function TicketDetail() {
+  const { user } = useAuth()
   const { id } = useParams<{ id: string }>()
   const ticketId = Number(id)
+
+  const isAuthorized = ['ADMIN', 'AGENT'].includes(user?.role ?? '');
 
   const { data: ticket, isLoading, isError } = useTicket(ticketId)
 
@@ -44,12 +48,17 @@ export function TicketDetail() {
           </div>
         </CardContent>
       </Card>
-
-      <SlaStatus ticketId={ticket.id} />
-      <TicketActions ticket={ticket} />
+      {isAuthorized && (
+        <SlaStatus ticketId={ticket.id} />
+      )}
+      {isAuthorized && (
+        <TicketActions ticket={ticket} />
+      )}
       <AttachmentList ticketId={ticket.id} />
       <CommentList ticketId={ticket.id} />
-      <AuditTrail ticketId={ticket.id} />
+      {isAuthorized && (
+        <AuditTrail ticketId={ticket.id} />
+      )}
     </div>
   )
 }

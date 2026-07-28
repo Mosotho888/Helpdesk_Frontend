@@ -32,3 +32,12 @@ export async function addReply(commentId: number, body: string, type?: CommentTy
   })
   return response.data
 }
+
+export async function updateComment(commentId: number, body: string): Promise<CommentResponse> {
+  const response = await apiClient.put<CommentResponse>(`/comments/${commentId}`, { body })
+  return response.data
+}
+
+export async function deleteComment(commentId: number): Promise<void> {
+  await apiClient.delete(`/comments/${commentId}`)
+}
