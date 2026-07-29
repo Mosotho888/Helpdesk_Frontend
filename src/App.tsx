@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './features/auth/context/AuthContext'
+import { AuthProvider } from './features/auth/context/AuthProvider'
 import { LoginPage } from './features/auth/components/LoginPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { TicketTable } from './features/tickets/components/TicketTable'
