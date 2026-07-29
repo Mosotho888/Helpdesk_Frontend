@@ -39,7 +39,7 @@ jobs:
 
   docker-publish:
     name: Build & Push Docker Image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     needs: [ build-and-lint ]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
