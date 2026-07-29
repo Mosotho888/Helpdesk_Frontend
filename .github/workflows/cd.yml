@@ -1,0 +1,26 @@
+name: GovHelpDesk Frontend CD
+
+on:
+  workflow_run:
+    workflows: ["GovHelpDesk Frontend CI"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to OCI
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Deploy to OCI VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.OCI_VM_IP }}
+          username: ubuntu
+          key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/helpdesk
+            docker compose pull frontend
+            docker compose up -d --no-deps frontend
+            docker image prune -f
