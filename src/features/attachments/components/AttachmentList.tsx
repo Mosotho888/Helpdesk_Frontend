@@ -80,8 +80,9 @@ export function AttachmentList({ ticketId }: { ticketId: number }) {
       )}
 
       <div className="space-y-1.5 pt-2 border-t">
-        <label className="text-sm font-medium">Upload new file</label>
+        <label htmlFor="attachment-upload" className="text-sm font-medium">Upload new file</label>
         <Input
+          id="attachment-upload"
           type="file"
           multiple
           onChange={handleFileSelect}
