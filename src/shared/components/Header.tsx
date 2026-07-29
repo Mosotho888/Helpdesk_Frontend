@@ -1,4 +1,4 @@
-import { useAuth } from '../../features/auth/context/AuthContext'
+import { useAuth } from '../../features/auth/context/useAuth'
 import { useNavigate, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 

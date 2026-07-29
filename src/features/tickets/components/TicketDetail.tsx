@@ -8,7 +8,7 @@ import { AttachmentList } from '../../attachments/components/AttachmentList'
 import { TicketActions } from './TicketActions'
 import { CommentList } from '../../comments/components/CommentList'
 import { AuditTrail } from '../../audit/components/AuditTrail'
-import { useAuth } from '../../auth/context/AuthContext'
+import { useAuth } from '../../auth/context/useAuth'
 
 export function TicketDetail() {
   const { user } = useAuth()

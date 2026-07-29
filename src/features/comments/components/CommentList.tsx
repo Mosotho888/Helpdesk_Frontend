@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useComments, useAddComment, useAddReply, useUpdateComment, useDeleteComment } from '../hooks/useComments'
-import { useAuth } from '../../auth/context/AuthContext'
+import { useAuth } from '../../auth/context/useAuth'
 import type { CommentResponse, CommentType } from '../types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
