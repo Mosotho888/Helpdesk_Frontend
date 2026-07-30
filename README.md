@@ -64,7 +64,7 @@ A full-stack IT helpdesk ticketing system built for a ZA Government Helpdesk use
 
 ## Architecture
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for a full technical breakdown, and [docs/DECISIONS.md](./docs/DECISIONS.md) for a running log of engineering decisions and bugs found/fixed during development.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for a full technical breakdown, and [docs/frontend/DECISIONS.md](./docs/frontend/DECISIONS.md) for a running log of engineering decisions and bugs found/fixed during development.
 
 ## Getting Started
 
