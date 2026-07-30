@@ -1,75 +1,108 @@
-# React + TypeScript + Vite
+# GovHelpDesk - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![CI](https://github.com/Mosotho888/Helpdesk_Frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/Mosotho888/Helpdesk_Frontend/actions/workflows/ci.yml)
+[![CD](https://github.com/Mosotho888/Helpdesk_Frontend/actions/workflows/cd.yml/badge.svg)](https://github.com/Mosotho888/Helpdesk_Frontend/actions/workflows/cd.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://www.typescriptlang.org)
 
-Currently, two official plugins are available:
+A full-stack IT helpdesk ticketing system built for a ZA Government Helpdesk use case, with role-based access for Users, Agents, and Admins. This is the React frontend; the [Spring Boot backend](https://github.com/Mosotho888/GovHelp_Desk) lives in a separate repository.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**🔗 Live demo:** https://govhelpdesk.sothoman.com
+**📄 Backend API docs:** https://api.sothoman.com/swagger-ui/index.html
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Table of Contents
 
-## Expanding the ESLint configuration
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+- [Docker](#docker)
+- [CI/CD](#cicd)
+- [Contributing](#contributing)
+- [License](#license)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Authentication** - JWT login with silent session restore, logout, and self-service OTP-based password reset
+- **Ticket management** - server-side sortable/filterable/paginated queue, detail view, creation, inline status/priority/assignee updates
+- **Threaded comments** - nested replies, internal notes (Agent/Admin only), comment types, edit/delete with a 15-minute author window
+- **SLA tracking** - response/resolution due dates and breach status, calculated server-side with business-hours logic
+- **Attachments** - multipart file upload/download/delete with client-side validation
+- **Audit trail** - per-ticket history plus admin reports (auth events, by actor, by action)
+- **User and Agent administration** - role management, activation/deactivation, agent availability/department, performance stats
+- **Profile settings** - self-service profile editing and password changes
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Screenshots
 
+> _Add screenshots or a short demo GIF here - this is often the first thing a visitor looks at._
+
+| Ticket Queue | Ticket Detail |
+|---|---|
+| _screenshot_ | _screenshot_ |
+
+## Tech Stack
+
+| Category | Choice |
+|---|---|
+| Framework | React 18 + TypeScript + Vite |
+| Server state | TanStack Query |
+| Tables | TanStack Table |
+| Routing | React Router |
+| Forms | React Hook Form + Zod |
+| Styling | Tailwind CSS + shadcn/ui (Base UI, Nova preset) |
+| HTTP client | Axios (JWT auth, automatic refresh + retry) |
+| Deployment | Docker + Nginx, GitHub Actions CI/CD, OCI ARM VM |
+
+## Architecture
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for a full technical breakdown, and [docs/DECISIONS.md](./docs/DECISIONS.md) for a running log of engineering decisions and bugs found/fixed during development.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- The [GovHelpDesk backend](#https://github.com/Mosotho888/GovHelp_Desk) running locally on `localhost:8080` (or point `.env.development` at a hosted instance)
+
+### Installation
+
+```bash
+git clone https://github.com/Mosotho888/Helpdesk_Frontend.git
+cd Helpdesk_Frontend
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app runs at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Environment Variables
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+See `.env.example` for required variables. `.env.development` and `.env.production` are committed since they contain only public API base URLs, not secrets.
 
+## Docker
+
+```bash
+docker build -t govhelpdesk-frontend .
+docker run -p 8081:80 govhelpdesk-frontend
 ```
+
+## CI/CD
+
+Pushes to any branch run lint, type-check, and build. Merges to `main` additionally build and push a multi-arch Docker image, then deploy to production via SSH.
+
+## Contributing
+
+This is a personal portfolio project, not currently accepting external contributions, but feedback and issues are welcome via the [Issues tab](https://github.com/Mosotho888/Helpdesk_Frontend/issues).
+
+## License
+
+Licensed under the [MIT License](./LICENSE).
