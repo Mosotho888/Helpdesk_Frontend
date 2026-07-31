@@ -6,6 +6,7 @@ import {
   createColumnHelper,
   type SortingState,
 } from '@tanstack/react-table'
+import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { useTickets } from '../hooks/useTickets'
 import type { TicketResponse, TicketStatus, TicketPriority } from '../types'
 import { getStatusBadgeClasses, getPriorityBadgeClasses } from '../utils/badgeVariants'
@@ -68,6 +69,17 @@ export function TicketTable() {
     pageCount: data?.totalPages ?? -1,
   })
 
+  // Helper function to render modern sorting indicators
+  const renderSortIcon = (isSorted: false | string) => {
+    if (isSorted === 'asc') {
+      return <ArrowUp className="h-4 w-4 text-foreground" />
+    }
+    if (isSorted === 'desc') {
+      return <ArrowDown className="h-4 w-4 text-foreground" />
+    }
+    return <ArrowUpDown className="h-4 w-4 opacity-0 group-hover:opacity-50 transition-opacity" />
+  }
+
   if (isLoading) return <p className="p-4 text-muted-foreground">Loading tickets...</p>
   if (isError) return <p className="p-4 text-destructive">Failed to load tickets.</p>
 
@@ -107,16 +119,25 @@ export function TicketTable() {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    className="cursor-pointer select-none"
-                  >
-                    {header.isPlaceholder ? null : header.column.columnDef.header as string}
-                    {{ asc: ' 🔼', desc: ' 🔽' }[header.column.getIsSorted() as string] ?? ''}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  const isSorted = header.column.getIsSorted()
+                  return (
+                    <TableHead
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className="cursor-pointer select-none group"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>
+                          {header.isPlaceholder
+                            ? null
+                            : (header.column.columnDef.header as string)}
+                        </span>
+                        {renderSortIcon(isSorted)}
+                      </div>
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
           </TableHeader>
