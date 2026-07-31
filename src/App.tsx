@@ -4,7 +4,6 @@ import { LoginPage } from './features/auth/components/LoginPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { TicketTable } from './features/tickets/components/TicketTable'
 import { TicketDetail } from './features/tickets/components/TicketDetail'
-import { Header } from './shared/components/Header'
 import { CreateTicketForm } from './features/tickets/components/CreateTicketForm'
 import { AdminRoute } from './routes/AdminRoute'
 import { UserManagement } from './features/users/components/UserManagement'
@@ -12,7 +11,7 @@ import { ProfileSettings } from './features/users/components/ProfileSettings'
 import { AgentManagement } from './features/agents/components/AgentManagement'
 import { AuditReports } from './features/audit/components/AuditReports'
 import { ForgotPasswordPage } from './features/auth/components/ForgotPasswordPage'
-
+import { AppLayout } from './shared/components/AppLayout'
 function App() {
   return (
     <AuthProvider>
@@ -24,8 +23,9 @@ function App() {
             path="/"
             element={
               <ProtectedRoute>
-                <Header />
-                <TicketTable />
+                <AppLayout>
+                  <TicketTable />
+                </AppLayout>
               </ProtectedRoute>
             }
           />
@@ -33,8 +33,9 @@ function App() {
             path="/admin/agents"
             element={
               <AdminRoute>
-                <Header />
-                <AgentManagement />
+                <AppLayout>
+                  <AgentManagement />
+                </AppLayout>
               </AdminRoute>
             }
           />
@@ -42,8 +43,9 @@ function App() {
             path="/admin/users"
             element={
               <AdminRoute>
-                <Header />
-                <UserManagement />
+                <AppLayout>
+                  <UserManagement />
+                </AppLayout>
               </AdminRoute>
             }
           />
@@ -51,8 +53,9 @@ function App() {
             path="/admin/audit"
             element={
               <AdminRoute>
-                <Header />
-                <AuditReports />
+                <AppLayout>
+                  <AuditReports />
+                </AppLayout>
               </AdminRoute>
             }
           />
@@ -60,8 +63,9 @@ function App() {
             path="/tickets/:id"
             element={
               <ProtectedRoute>
-                <Header />
-                <TicketDetail />
+                <AppLayout>
+                  <TicketDetail />
+                </AppLayout>
               </ProtectedRoute>
             }
           />
@@ -69,8 +73,9 @@ function App() {
             path="/tickets/new"
             element={
               <ProtectedRoute>
-                <Header />
-                <CreateTicketForm />
+                <AppLayout>
+                  <CreateTicketForm />
+                </AppLayout>
               </ProtectedRoute>
             }
           />
@@ -78,8 +83,9 @@ function App() {
             path="/profile"
             element={
               <ProtectedRoute>
-                <Header />
-                <ProfileSettings />
+                <AppLayout>
+                  <ProfileSettings />
+                </AppLayout>
               </ProtectedRoute>
             }
           />
