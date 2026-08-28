@@ -6,6 +6,8 @@ interface UseTicketsParams {
   status?: TicketStatus
   priority?: TicketPriority
   assigneeId?: number
+  categoryId?: number
+  includeDescendants?: boolean
   page?: number
   size?: number
   sort?: string[]

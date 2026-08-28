@@ -41,7 +41,7 @@ export function TicketDetail() {
         <CardContent className="space-y-2 text-sm">
           <p className="text-base text-foreground">{ticket.description}</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-muted-foreground pt-2 border-t">
-            <p><span className="font-medium text-foreground">Category:</span> {ticket.category ?? 'Uncategorized'}</p>
+            <p><span className="font-medium text-foreground">Category:</span> {ticket.category?.path ?? 'Uncategorised'}</p>
             <p><span className="font-medium text-foreground">Requester:</span> {ticket.requester.name}</p>
             <p><span className="font-medium text-foreground">Assignee:</span> {ticket.assignee?.name ?? 'Unassigned'}</p>
             <p><span className="font-medium text-foreground">Created:</span> {new Date(ticket.createdAt).toLocaleString()}</p>

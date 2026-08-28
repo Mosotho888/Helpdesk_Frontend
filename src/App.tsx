@@ -9,9 +9,12 @@ import { AdminRoute } from './routes/AdminRoute'
 import { UserManagement } from './features/users/components/UserManagement'
 import { ProfileSettings } from './features/users/components/ProfileSettings'
 import { AgentManagement } from './features/agents/components/AgentManagement'
+import { CategoryManagement } from './features/categories/components/CategoryManagement'
 import { AuditReports } from './features/audit/components/AuditReports'
 import { ForgotPasswordPage } from './features/auth/components/ForgotPasswordPage'
 import { AppLayout } from './shared/components/AppLayout'
+import { NotFoundPage } from './shared/components/NotFoundPage'
+
 function App() {
   return (
     <AuthProvider>
@@ -35,6 +38,16 @@ function App() {
               <AdminRoute>
                 <AppLayout>
                   <AgentManagement />
+                </AppLayout>
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/categories"
+            element={
+              <AdminRoute>
+                <AppLayout>
+                  <CategoryManagement />
                 </AppLayout>
               </AdminRoute>
             }
@@ -89,7 +102,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="*" 
+            element={
+              <NotFoundPage />
+            } 
+          />
         </Routes>
+        
       </BrowserRouter>
     </AuthProvider>
   )

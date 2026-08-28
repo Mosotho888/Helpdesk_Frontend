@@ -10,6 +10,7 @@ import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react'
 import { useTickets } from '../hooks/useTickets'
 import type { TicketResponse, TicketStatus, TicketPriority } from '../types'
 import { getStatusBadgeClasses, getPriorityBadgeClasses } from '../utils/badgeVariants'
+import { CategorySelect } from '../../categories/components/CategorySelect'
 import {
   Table,
   TableBody,
@@ -34,6 +35,10 @@ const columns = [
   columnHelper.accessor('subject', { header: 'Subject' }),
   columnHelper.accessor('status', { header: 'Status' }),
   columnHelper.accessor('priority', { header: 'Priority' }),
+  columnHelper.accessor((row) => row.category?.name ?? 'Uncategorized', {
+    id: 'category',
+    header: 'Category',
+  }),
   columnHelper.accessor((row) => row.assignee?.name ?? 'Unassigned', {
     id: 'assignee',
     header: 'Assignee',
@@ -46,12 +51,16 @@ export function TicketTable() {
   const [page, setPage] = useState(0)
   const [statusFilter, setStatusFilter] = useState<TicketStatus | 'ALL'>('ALL')
   const [priorityFilter, setPriorityFilter] = useState<TicketPriority | 'ALL'>('ALL')
+  const [categoryFilter, setCategoryFilter] = useState<number | null>(null)
+  const [includeDescendants, setIncludeDescendants] = useState(true)
 
   const sortParam = sorting.length > 0 ? [`${sorting[0].id},${sorting[0].desc ? 'desc' : 'asc'}`] : undefined
 
   const { data, isLoading, isError } = useTickets({
     status: statusFilter === 'ALL' ? undefined : statusFilter,
     priority: priorityFilter === 'ALL' ? undefined : priorityFilter,
+    categoryId: categoryFilter ?? undefined,
+    includeDescendants: categoryFilter != null ? includeDescendants : undefined,
     page,
     size: 20,
     sort: sortParam,
@@ -114,6 +123,27 @@ export function TicketTable() {
         </Select>
       </div>
 
+      <div className="w-[220px]">
+          <CategorySelect
+            value={categoryFilter}
+            onChange={(id) => { setCategoryFilter(id); setPage(0) }}
+            noneLabel="All categories"
+            placeholder="Category"
+          />
+        </div>
+
+        {categoryFilter != null && (
+          <label className="flex items-center gap-2 text-sm text-muted-foreground pb-2 select-none">
+            <input
+              type="checkbox"
+              checked={includeDescendants}
+              onChange={(e) => { setIncludeDescendants(e.target.checked); setPage(0) }}
+              className="size-4 rounded border-input accent-primary"
+            />
+            Include subcategories
+          </label>
+        )}
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -158,6 +188,9 @@ export function TicketTable() {
                   <Badge className={getPriorityBadgeClasses(row.original.priority)}>
                     {row.original.priority}
                   </Badge>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {row.original.category?.name ?? 'Uncategorised'}
                 </TableCell>
                 <TableCell>{row.original.assignee?.name ?? 'Unassigned'}</TableCell>
               </TableRow>

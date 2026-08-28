@@ -5,6 +5,8 @@ interface GetTicketsParams {
   status?: TicketStatus
   priority?: TicketPriority
   assigneeId?: number
+  categoryId?: number
+  includeDescendants?: boolean
   page?: number
   size?: number
   sort?: string[]
@@ -21,6 +23,8 @@ export async function getTickets(params: GetTicketsParams = {}): Promise<PageTic
       status: params.status,
       priority: params.priority,
       assigneeId: params.assigneeId,
+      categoryId: params.categoryId,
+      includeDescendants: params.includeDescendants,
       page: params.page ?? 0,
       size: params.size ?? 20,
       sort: params.sort,

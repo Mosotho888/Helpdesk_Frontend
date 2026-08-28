@@ -1,4 +1,5 @@
 import type { UserResponse } from '../users/types'
+import type { CategorySummaryResponse } from '../categories/types'
 
 export type TicketStatus = "OPEN" | "IN_PROGRESS" | "ESCALATED" | "RESOLVED" | "CLOSED"
 export type TicketPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT"
@@ -9,7 +10,7 @@ export interface TicketResponse {
   description: string
   status: TicketStatus
   priority: TicketPriority
-  category: string | null
+  category: CategorySummaryResponse | null
   requester: UserResponse
   assignee: UserResponse | null
   escalated: boolean
@@ -33,7 +34,7 @@ export interface CreateTicketRequest {
   subject: string
   description: string
   priority?: TicketPriority
-  category?: string
+  categoryId?: number
   assigneeId?: number
   tags?: string[]
 }
@@ -41,7 +42,7 @@ export interface CreateTicketRequest {
 export interface UpdateTicketRequest {
   status?: TicketStatus
   priority?: TicketPriority
-  category?: string
+  categoryId?: number
   assigneeId?: number
   escalated?: boolean
   escalationReason?: string

@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { createTicket } from '../api/ticketApi'
 import { createTicketSchema, type CreateTicketFormValues } from '../schemas/createTicketSchema'
+import { CategorySelect } from '../../categories/components/CategorySelect'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -90,7 +91,19 @@ export function CreateTicketForm() {
 
             <div className="space-y-1.5">
               <Label htmlFor="category">Category</Label>
-              <Input id="category" {...register('category')} />
+              <Controller
+                name="categoryId"
+                control={control}
+                render={({ field }) => (
+                  <CategorySelect
+                    id="category"
+                    value={field.value ?? null}
+                    onChange={field.onChange}
+                    noneLabel="Uncategorized"
+                    placeholder="Select a category"
+                  />
+                )}
+              />
             </div>
 
             {mutation.isError && <p role="alert" className="text-sm text-destructive">Failed to create ticket. Please try again.</p>}
