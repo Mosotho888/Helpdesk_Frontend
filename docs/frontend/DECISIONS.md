@@ -1,6 +1,6 @@
 # Frontend Architecture Decisions
 
-A log of non-obvious technical decisions, tradeoffs, and bugs encountered while building this application - written at the time each decision was made, not reconstructed afterward. For a synthesized, system-level view, see [ARCHITECTURE.md](../../ARCHITECTURE.md).
+A log of non-obvious technical decisions, tradeoffs, and bugs encountered while building this application - written at the time each decision was made, not reconstructed afterward. For a synthesised, system-level view, see [ARCHITECTURE.md](../../ARCHITECTURE.md).
 
 ## Contents
 
@@ -145,6 +145,17 @@ CreateAgentDialog cross-references useUsers + useAgentsList client-side (no dedi
 AuditTrail fetches GET /audit/tickets/{id} and renders a chronological list of actions (formatted from raw enum values like STATUS_CHANGED -> "Status Changed"). Fails silently for non-Admin/Agent viewers.
 
 AuditReports runs useAuthLogs/useLogsByActor/useLogsByAction simultaneously via three separate useQuery hooks, but only the one matching the current reportType has `enabled: true` - simpler than dynamically constructing one conditional query. formatAction extracted into a shared util once needed in a second place.
+
+### Ticket categories: flattened list instead of a tree widget
+The backend's category tree is capped at 3 levels and stays small (a few dozen nodes for a municipal help desk), so `CategorySelect` renders it as a single flat, indented `Select` list (built via `flattenCategories`'s depth-first walk) rather than introducing a new Popover/Command-based combobox dependency - no component in `components/ui/` supported that pattern yet, and the added bundle weight and integration risk wasn't justified for this data shape. Indentation uses a repeated non-breaking-space prefix plus a `↳` glyph per level; this also shows through in the trigger's collapsed state once a subcategory is selected, which was left as-is since it usefully signals "this is a subcategory" rather than hidden as a cosmetic flaw.
+
+`CategorySelect` is intentionally the single reusable picker across three call sites (CreateTicketForm, TicketActions, TicketTable's filter) with a `noneLabel` prop that changes meaning by context ("Uncategorized" on the form/detail views, "All categories" on the filter) rather than three near-duplicate components.
+
+### Category filter: "include subcategories" defaults on
+TicketTable's category filter pairs with a checkbox toggle (`includeDescendants`) that only renders once a category is selected. Defaulted to `true` (opposite of the backend's own default) since the more intuitive behavior when a user filters by a parent category like "Hardware" is to also see "Laptop"/"Printer" tickets - the narrower exact-match-only behavior is opt-out, not opt-in, from the UI's perspective.
+
+### Category recategorization: no explicit "clear" option
+TicketActions' category picker can move a ticket to a different category but not back to "Uncategorized" - the backend's `UpdateTicketRequest.categoryId` only applies a change when non-null, so `null` and "field omitted" are indistinguishable over JSON. Flagged in ARCHITECTURE.md as follow-up work needing a small backend change (e.g. an explicit `clearCategory` flag) rather than a frontend-only fix.
 
 ---
 

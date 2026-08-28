@@ -33,7 +33,8 @@ A full-stack IT helpdesk ticketing system built for a ZA Government Helpdesk use
 ## Features
 
 - **Authentication** - JWT login with silent session restore, logout, and self-service OTP-based password reset
-- **Ticket management** - server-side sortable/filterable/paginated queue, detail view, creation, inline status/priority/assignee updates
+- **Ticket management** - server-side sortable/filterable/paginated queue, detail view, creation, inline status/priority/category/assignee updates
+- **Hierarchical ticket categories** - category/subcategory picker on ticket creation and edit, category filtering (with subcategories included), and an admin screen for managing the category tree and its default routing department
 - **Threaded comments** - nested replies, internal notes (Agent/Admin only), comment types, edit/delete with a 15-minute author window
 - **SLA tracking** - response/resolution due dates and breach status, calculated server-side with business-hours logic
 - **Attachments** - multipart file upload/download/delete with client-side validation
