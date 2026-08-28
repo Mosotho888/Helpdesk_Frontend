@@ -8,6 +8,7 @@ This document explains the frontend's structure and the reasoning behind its maj
 src/
 features/
 tickets/ api/ components/ hooks/ schemas/ types.ts utils/
+categories/ api/ components/ hooks/ utils/ types.ts
 comments/
 auth/
 users/
@@ -48,6 +49,10 @@ Chose Base UI over shadcn's Radix option since Radix's development has slowed fo
 
 Status/priority/availability badges use explicit semantic Tailwind classes rather than shadcn's generic `default/secondary/destructive/outline` variants, since the generic set produces near-identical, low-contrast colors when mapped onto 5+ domain-specific states.
 
+## Category Picker: Flattened Select Over a New Tree Widget
+
+`CategorySelect` renders the category hierarchy as an indented, flat list inside the existing shadcn `Select` primitive, rather than introducing a dedicated tree/combobox component. The category tree is shallow (max 3 levels) and small (a few dozen nodes), so the added complexity and bundle weight of a new Popover/Command-based combobox wasn't justified for the actual data shape - the flattened `Select` reads just as clearly and reuses a component the app already ships.
+
 ## Error Handling
 
 A global `ErrorBoundary` wraps the app, catching any uncaught rendering error and showing a contained message rather than a blank white screen - added after a real production-shape bug (a spec-vs-reality nullability mismatch causing a `.toFixed()` crash on `null`) revealed the app had no safety net for unexpected runtime errors.
@@ -58,7 +63,8 @@ A global `ErrorBoundary` wraps the app, catching any uncaught rendering error an
 - **Refresh token in `localStorage`**, pending backend `httpOnly` cookie support (see Authentication section above).
 - **Auth-retry exclusions use URL string matching** rather than a typed per-request flag - works correctly at the current scale (5 exclusions), but was intentionally scoped for a future refactor to a `skipAuthRetry` config flag via TypeScript module augmentation, rather than implemented mid-feature.
 - **Seeded demo data** (tickets inserted directly into Postgres rather than through the real API) lack SLA records, since they bypass the service-layer logic that generates them - a data-seeding gap, not an application bug.
+- **Category filter can't be explicitly cleared back to "Uncategorised"** from `TicketActions` - the backend's `UpdateTicketRequest.categoryId` only triggers a change when a value is provided, so `null` and "not provided" are indistinguishable in JSON today. Setting a new category works; un-setting one requires a small backend change (e.g. an explicit `clearCategory` flag) tracked as follow-up work.
 
 ## Deployment
 
-Containerized via a multi-stage Docker build (Node build stage -> Nginx serving static output). Deployed to the same OCI ARM VM as the backend, routed via Nginx hostname-based reverse proxy and Cloudflare DNS/TLS, with GitHub Actions handling CI (lint, type-check, build on every push) and CD (build + push multi-arch image, deploy via SSH on merge to `main`).
+Containerised via a multi-stage Docker build (Node build stage -> Nginx serving static output). Deployed to the same OCI ARM VM as the backend, routed via Nginx hostname-based reverse proxy and Cloudflare DNS/TLS, with GitHub Actions handling CI (lint, type-check, build on every push) and CD (build + push multi-arch image, deploy via SSH on merge to `main`).

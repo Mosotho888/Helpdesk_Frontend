@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateTicket } from '../api/ticketApi'
 import { useAgents } from '../../agents/hooks/useAgents'
+import { CategorySelect } from '../../categories/components/CategorySelect'
 import type { TicketResponse, TicketStatus, TicketPriority } from '../types'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -42,6 +43,11 @@ function handleAssigneeChange(value: string | null) {
     return
   }
   mutation.mutate({ id: ticket.id, payload: { assigneeId: Number(value) } })
+}
+
+function handleCategoryChange(categoryId: number | null) {
+  if (categoryId == null) return // categories are only ever added/changed here, not cleared
+  mutation.mutate({ id: ticket.id, payload: { categoryId } })
 }
 
   const currentAgentId =
@@ -105,6 +111,16 @@ function handleAssigneeChange(value: string | null) {
               ))}
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-1.5 w-[220px]">
+          <Label>Category</Label>
+          <CategorySelect
+            value={ticket.category?.id ?? null}
+            onChange={handleCategoryChange}
+            noneLabel="Uncategorised"
+            disabled={mutation.isPending}
+          />
         </div>
 
         {mutation.isPending && <span className="text-sm text-muted-foreground self-end pb-2">Saving...</span>}

@@ -96,6 +96,13 @@ export function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     nativeButton={false}
+                    render={<Link to="/admin/categories" />}
+                    className="cursor-pointer"
+                  >
+                    Manage Categories
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    nativeButton={false}
                     render={<Link to="/admin/audit" />}
                     className="cursor-pointer"
                   >
