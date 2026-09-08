@@ -8,6 +8,7 @@ import { AttachmentList } from '../../attachments/components/AttachmentList'
 import { TicketActions } from './TicketActions'
 import { CommentList } from '../../comments/components/CommentList'
 import { AuditTrail } from '../../audit/components/AuditTrail'
+import { LinkedAssets } from '../../assets/components/LinkedAssets'
 import { useAuth } from '../../auth/context/useAuth'
 
 export function TicketDetail() {
@@ -41,7 +42,7 @@ export function TicketDetail() {
         <CardContent className="space-y-2 text-sm">
           <p className="text-base text-foreground">{ticket.description}</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-muted-foreground pt-2 border-t">
-            <p><span className="font-medium text-foreground">Category:</span> {ticket.category?.path ?? 'Uncategorised'}</p>
+            <p><span className="font-medium text-foreground">Category:</span> {ticket.category?.path ?? 'Uncategorized'}</p>
             <p><span className="font-medium text-foreground">Requester:</span> {ticket.requester.name}</p>
             <p><span className="font-medium text-foreground">Assignee:</span> {ticket.assignee?.name ?? 'Unassigned'}</p>
             <p><span className="font-medium text-foreground">Created:</span> {new Date(ticket.createdAt).toLocaleString()}</p>
@@ -53,6 +54,9 @@ export function TicketDetail() {
       )}
       {isAuthorized && (
         <TicketActions ticket={ticket} />
+      )}
+      {isAuthorized && (
+        <LinkedAssets ticketId={ticket.id} />
       )}
       <AttachmentList ticketId={ticket.id} />
       <CommentList ticketId={ticket.id} />

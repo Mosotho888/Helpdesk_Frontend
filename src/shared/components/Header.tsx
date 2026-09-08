@@ -22,6 +22,7 @@ export function Header() {
   }
 
   const isAdmin = user?.role === 'ADMIN'
+  const isStaff = user?.role === 'ADMIN' || user?.role === 'AGENT'
 
   return (
     <header className="border-b bg-background sticky top-0 z-50">
@@ -109,6 +110,18 @@ export function Header() {
                     Audit Reports
                   </DropdownMenuItem>
                 </>
+              )}
+
+              {isStaff && !isAdmin && <DropdownMenuSeparator />}
+
+              {isStaff && (
+                <DropdownMenuItem
+                  nativeButton={false}
+                  render={<Link to="/admin/assets" />}
+                  className="cursor-pointer"
+                >
+                  Manage Assets
+                </DropdownMenuItem>
               )}
 
               <DropdownMenuSeparator />

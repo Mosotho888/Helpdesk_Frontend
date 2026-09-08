@@ -6,14 +6,16 @@ import { TicketTable } from './features/tickets/components/TicketTable'
 import { TicketDetail } from './features/tickets/components/TicketDetail'
 import { CreateTicketForm } from './features/tickets/components/CreateTicketForm'
 import { AdminRoute } from './routes/AdminRoute'
+import { StaffRoute } from './routes/StaffRoute'
 import { UserManagement } from './features/users/components/UserManagement'
 import { ProfileSettings } from './features/users/components/ProfileSettings'
 import { AgentManagement } from './features/agents/components/AgentManagement'
 import { CategoryManagement } from './features/categories/components/CategoryManagement'
+import { AssetManagement } from './features/assets/components/AssetManagement'
+import { AssetDetail } from './features/assets/components/AssetDetail'
 import { AuditReports } from './features/audit/components/AuditReports'
 import { ForgotPasswordPage } from './features/auth/components/ForgotPasswordPage'
 import { AppLayout } from './shared/components/AppLayout'
-import { NotFoundPage } from './shared/components/NotFoundPage'
 
 function App() {
   return (
@@ -50,6 +52,26 @@ function App() {
                   <CategoryManagement />
                 </AppLayout>
               </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/assets"
+            element={
+              <StaffRoute>
+                <AppLayout>
+                  <AssetManagement />
+                </AppLayout>
+              </StaffRoute>
+            }
+          />
+          <Route
+            path="/admin/assets/:id"
+            element={
+              <StaffRoute>
+                <AppLayout>
+                  <AssetDetail />
+                </AppLayout>
+              </StaffRoute>
             }
           />
           <Route
@@ -102,14 +124,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="*" 
-            element={
-              <NotFoundPage />
-            } 
-          />
         </Routes>
-        
       </BrowserRouter>
     </AuthProvider>
   )
