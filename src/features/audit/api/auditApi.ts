@@ -6,6 +6,16 @@ export async function getTicketAuditLogs(ticketId: number): Promise<AuditLogResp
   return response.data
 }
 
+export async function getAssetAuditLogs(assetId: number): Promise<AuditLogResponse[]> {
+  const response = await apiClient.get<AuditLogResponse[]>(`/audit/assets/${assetId}`)
+  return response.data
+}
+
+export async function getArticleAuditLogs(articleId: number): Promise<AuditLogResponse[]> {
+  const response = await apiClient.get<AuditLogResponse[]>(`/audit/knowledge-articles/${articleId}`)
+  return response.data
+}
+
 export async function getAuthLogs(page = 0, size = 20): Promise<PageAuditLogResponse> {
   const response = await apiClient.get<PageAuditLogResponse>('/audit/auth', {
     params: { page, size },

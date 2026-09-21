@@ -9,6 +9,7 @@ import { TicketActions } from './TicketActions'
 import { CommentList } from '../../comments/components/CommentList'
 import { AuditTrail } from '../../audit/components/AuditTrail'
 import { LinkedAssets } from '../../assets/components/LinkedAssets'
+import { LinkedArticles } from '../../knowledgeBase/components/LinkedArticles'
 import { useAuth } from '../../auth/context/useAuth'
 
 export function TicketDetail() {
@@ -58,6 +59,7 @@ export function TicketDetail() {
       {isAuthorized && (
         <LinkedAssets ticketId={ticket.id} />
       )}
+      <LinkedArticles ticketId={ticket.id} canEdit={isAuthorized} />
       <AttachmentList ticketId={ticket.id} />
       <CommentList ticketId={ticket.id} />
       {isAuthorized && (
