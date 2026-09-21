@@ -37,6 +37,14 @@ export function Header() {
           {/* Primary Action Button */}
           <Button
             size="sm"
+            variant="outline"
+            nativeButton={false}
+            render={<Link to="/knowledge-base" />}
+          >
+            Knowledge Base
+          </Button>
+          <Button
+            size="sm"
             nativeButton={false}
             render={<Link to="/tickets/new" />}
           >
@@ -121,6 +129,16 @@ export function Header() {
                   className="cursor-pointer"
                 >
                   Manage Assets
+                </DropdownMenuItem>
+              )}
+
+              {isStaff && (
+                <DropdownMenuItem
+                  nativeButton={false}
+                  render={<Link to="/reports" />}
+                  className="cursor-pointer"
+                >
+                  Reports
                 </DropdownMenuItem>
               )}
 

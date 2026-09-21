@@ -13,6 +13,10 @@ import { AgentManagement } from './features/agents/components/AgentManagement'
 import { CategoryManagement } from './features/categories/components/CategoryManagement'
 import { AssetManagement } from './features/assets/components/AssetManagement'
 import { AssetDetail } from './features/assets/components/AssetDetail'
+import { KnowledgeBasePage } from './features/knowledgeBase/components/KnowledgeBasePage'
+import { ArticleDetail } from './features/knowledgeBase/components/ArticleDetail'
+import { ArticleEditor } from './features/knowledgeBase/components/ArticleEditor'
+import { ReportingDashboard } from './features/reporting/components/ReportingDashboard'
 import { AuditReports } from './features/audit/components/AuditReports'
 import { ForgotPasswordPage } from './features/auth/components/ForgotPasswordPage'
 import { AppLayout } from './shared/components/AppLayout'
@@ -72,6 +76,56 @@ function App() {
                   <AssetDetail />
                 </AppLayout>
               </StaffRoute>
+            }
+          />
+          <Route
+            path="/knowledge-base"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <KnowledgeBasePage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/knowledge-base/new"
+            element={
+              <StaffRoute>
+                <AppLayout>
+                  <ArticleEditor />
+                </AppLayout>
+              </StaffRoute>
+            }
+          />
+          <Route
+            path="/knowledge-base/:id/edit"
+            element={
+              <StaffRoute>
+                <AppLayout>
+                  <ArticleEditor />
+                </AppLayout>
+              </StaffRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <StaffRoute>
+                <AppLayout>
+                  <ReportingDashboard />
+                </AppLayout>
+              </StaffRoute>
+            }
+          />
+          <Route
+            path="/knowledge-base/:id"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <ArticleDetail />
+                </AppLayout>
+              </ProtectedRoute>
             }
           />
           <Route
